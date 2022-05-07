@@ -23,12 +23,20 @@ class _Operands extends StatelessWidget {
     // TODO: implement build
     return Container(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Row(
               children: [
                 Expanded(
-                    child: Text("0", textScaleFactor: 2.0,))],
+                        child: Text("0", textScaleFactor: 3.0,)),
+                SizedBox(
+                  height: 60.0,
+                  width: 120.0,
+                  child: OutlinedButton(
+                    child: Text('DELETE', textScaleFactor: 1.5,),
+                    onPressed: () {},
+                  ),
+                ),],
             ),
 
             Row(
@@ -36,7 +44,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('1', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -44,17 +52,24 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('2', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
-                  width: 90.0,                  child: ElevatedButton(
+                  width: 90.0,                  child: OutlinedButton(
                     child: Text('3', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
+                ),
+                SizedBox(
+                  height: 90.0,
+                  width: 90.0,                  child: OutlinedButton(
+                  child: Text('÷', textScaleFactor: 2.0,),
+                  onPressed: () {},
+                ),
                 ),
               ],
             ),
@@ -63,7 +78,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('4', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -71,7 +86,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('5', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -79,10 +94,17 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('6', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
+                ),
+                SizedBox(
+                  height: 90.0,
+                  width: 90.0,                  child: OutlinedButton(
+                  child: Text('x', textScaleFactor: 2.0,),
+                  onPressed: () {},
+                ),
                 ),
               ],
             ),
@@ -91,7 +113,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('7', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -99,7 +121,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('8', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -107,10 +129,17 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('9', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
+                ),
+                SizedBox(
+                  height: 90.0,
+                  width: 90.0,                  child: OutlinedButton(
+                  child: Text('-', textScaleFactor: 2.0,),
+                  onPressed: () {},
+                ),
                 ),
               ],
             ),
@@ -119,7 +148,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('.', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -127,7 +156,7 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('0', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
@@ -135,10 +164,17 @@ class _Operands extends StatelessWidget {
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
-                  child: ElevatedButton(
+                  child: OutlinedButton(
                     child: Text('=', textScaleFactor: 2.0,),
                     onPressed: () {},
                   ),
+                ),
+                SizedBox(
+                  height: 90.0,
+                  width: 90.0,                  child: OutlinedButton(
+                  child: Text('+', textScaleFactor: 2.0,),
+                  onPressed: () {},
+                ),
                 ),
               ],
             ),
