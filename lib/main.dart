@@ -14,13 +14,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Calculator',
-      theme: appTheme,
-      initialRoute: '/',
-      routes: {
-        '/' : (context) => const Calculator()
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => CalculationsModel())
+      ],
+      child: MaterialApp(
+        title: 'Calculator',
+        theme: appTheme,
+        initialRoute: '/',
+        routes: {
+          '/' : (context) => const Calculator()
+        },
+      ),
     );
   }
 }

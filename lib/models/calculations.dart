@@ -9,9 +9,19 @@ import 'package:flutter/foundation.dart';
 class CalculationsModel extends ChangeNotifier
 {
 
-  final List<int> digits = [1,2,3,4,5,6,7,8,9,0];
+  //
+  int sum = 0;
   final List<Action> actions = [];
 
 
+  void addDigit(int digit)
+  {
+    sum += digit;
+    notifyListeners();
+  }
   //addAction
 }
+
+// Press the button
+//     // Add the action to the calculcations
+//         If the action is

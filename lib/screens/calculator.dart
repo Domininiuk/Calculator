@@ -1,12 +1,13 @@
 import 'package:calculator/main.dart';
+import 'package:calculator/models/calculations.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:provider/src/provider.dart';
 class Calculator extends StatelessWidget {
   const Calculator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
             title: Text(
@@ -20,15 +21,24 @@ class Calculator extends StatelessWidget {
 class _Operands extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Container(
       child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Row(
               children: [
-                Expanded(
-                        child: Text("0", textScaleFactor: 3.0,)),
+                Consumer<CalculationsModel>(
+                  builder: (context, calculations, child) {
+                    return Expanded(
+                        child: Text(context
+                            .read<CalculationsModel>()
+                            .sum
+                            .toString(),
+                          textScaleFactor: 3.0,)
+                    );
+                  }
+                ),
                 SizedBox(
                   height: 60.0,
                   width: 120.0,
@@ -46,7 +56,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('1', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 1);}
                   ),
                 ),
                 SizedBox(
@@ -54,14 +64,14 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('2', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 2);},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                     child: Text('3', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 3);},
                   ),
                 ),
                 SizedBox(
@@ -80,7 +90,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('4', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 4);},
                   ),
                 ),
                 SizedBox(
@@ -88,7 +98,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('5', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 5);},
                   ),
                 ),
                 SizedBox(
@@ -96,7 +106,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('6', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 6);},
                   ),
                 ),
                 SizedBox(
@@ -115,7 +125,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('7', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 7);},
                   ),
                 ),
                 SizedBox(
@@ -123,7 +133,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('8', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 8);},
                   ),
                 ),
                 SizedBox(
@@ -131,7 +141,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('9', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 9);},
                   ),
                 ),
                 SizedBox(
@@ -158,7 +168,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('0', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onDigitPressed(context, 0);},
                   ),
                 ),
                 SizedBox(
@@ -180,5 +190,11 @@ class _Operands extends StatelessWidget {
             ),
           ]),
     );
+  }
+
+  void onDigitPressed(BuildContext context, int digit)
+  {
+    var sum = context.read<CalculationsModel>();
+    sum.addDigit(digit);
   }
 }
