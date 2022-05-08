@@ -33,7 +33,7 @@ class _Operands extends StatelessWidget {
                     return Expanded(
                         child: Text(context
                             .read<CalculationsModel>()
-                            .sum
+                            .actionsString
                             .toString(),
                           textScaleFactor: 3.0,)
                     );
@@ -44,7 +44,7 @@ class _Operands extends StatelessWidget {
                   width: 120.0,
                   child: OutlinedButton(
                     child: Text('DELETE', textScaleFactor: 1.5,),
-                    onPressed: () {},
+                    onPressed: () {onDeletePressed(context);},
                   ),
                 ),],
             ),
@@ -56,7 +56,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('1', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 1);}
+                    onPressed: () {onOperandPressed(context, '1');}
                   ),
                 ),
                 SizedBox(
@@ -64,21 +64,21 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('2', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 2);},
+                    onPressed: () {onOperandPressed(context, '2');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                     child: Text('3', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 3);},
+                    onPressed: () {onOperandPressed(context, '3');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                   child: Text('÷', textScaleFactor: 2.0,),
-                  onPressed: () {},
+                  onPressed: () {onOperatorPressed(context, '÷');},
                 ),
                 ),
               ],
@@ -90,7 +90,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('4', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 4);},
+                    onPressed: () {onOperandPressed(context, '4');},
                   ),
                 ),
                 SizedBox(
@@ -98,7 +98,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('5', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 5);},
+                    onPressed: () {onOperandPressed(context, '5');},
                   ),
                 ),
                 SizedBox(
@@ -106,14 +106,14 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('6', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 6);},
+                    onPressed: () {onOperandPressed(context, '6');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                   child: Text('x', textScaleFactor: 2.0,),
-                  onPressed: () {},
+                  onPressed: () {onOperatorPressed(context, 'x');},
                 ),
                 ),
               ],
@@ -125,7 +125,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('7', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 7);},
+                    onPressed: () {onOperandPressed(context, '7');},
                   ),
                 ),
                 SizedBox(
@@ -133,7 +133,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('8', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 8);},
+                    onPressed: () {onOperandPressed(context, '8');},
                   ),
                 ),
                 SizedBox(
@@ -141,14 +141,14 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('9', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 9);},
+                    onPressed: () {onOperandPressed(context, '9');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                   child: Text('-', textScaleFactor: 2.0,),
-                  onPressed: () {},
+                  onPressed: () {onOperatorPressed(context, '-');},
                 ),
                 ),
               ],
@@ -160,7 +160,7 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('.', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    onPressed: () {onOperandPressed(context, '.');},
                   ),
                 ),
                 SizedBox(
@@ -168,22 +168,22 @@ class _Operands extends StatelessWidget {
                   width: 90.0,
                   child: OutlinedButton(
                     child: Text('0', textScaleFactor: 2.0,),
-                    onPressed: () {onDigitPressed(context, 0);},
+                    onPressed: () {onOperandPressed(context, '0');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,
                   child: OutlinedButton(
-                    child: Text('=', textScaleFactor: 2.0,),
-                    onPressed: () {},
+                    child: const Text('=', textScaleFactor: 2.0,),
+                    onPressed: () {onOperatorPressed(context, '=');},
                   ),
                 ),
                 SizedBox(
                   height: 90.0,
                   width: 90.0,                  child: OutlinedButton(
                   child: Text('+', textScaleFactor: 2.0,),
-                  onPressed: () {},
+                  onPressed: () {onOperatorPressed(context, '+');},
                 ),
                 ),
               ],
@@ -192,9 +192,22 @@ class _Operands extends StatelessWidget {
     );
   }
 
-  void onDigitPressed(BuildContext context, int digit)
+  void onOperandPressed(BuildContext context, String digit)
   {
-    var sum = context.read<CalculationsModel>();
-    sum.addDigit(digit);
+    var calculations = context.read<CalculationsModel>();
+    calculations.addOperand(digit);
   }
+
+  void onOperatorPressed(BuildContext context, String operator)
+  {
+    var calculations = context.read<CalculationsModel>();
+    calculations.addOperator(operator);
+  }
+
+  void onDeletePressed(BuildContext context)
+  {
+    var calculations = context.read<CalculationsModel>();
+    calculations.removeLast();
+  }
+  
 }
