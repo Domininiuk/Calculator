@@ -165,11 +165,53 @@ class CalculationsModel extends ChangeNotifier {
   }
 void _calculateTheProduct()
 {
+  if(currentNum.length >= 3)
+  {
 
+    result /= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+    result *= double.tryParse(currentNum)!;
+    notifyListeners();
+
+  }
+  else if(currentNum.length == 2)
+  {
+    result /=  double.tryParse(currentNum[0])!;
+
+    result *= double.tryParse(currentNum)!;
+    notifyListeners();
+  }
+  else if(currentNum.length == 1)
+  {
+    double? currNum = double.tryParse(currentNum);
+    result *= currNum!;
+    notifyListeners();
+
+  }
 }
 void _calculateTheQuotient()
 {
+  if(currentNum.length >= 3)
+  {
 
+    result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+    result /= double.tryParse(currentNum)!;
+    notifyListeners();
+
+  }
+  else if(currentNum.length == 2)
+  {
+  result *=  double.tryParse(currentNum[0])!;
+
+  result /= double.tryParse(currentNum)!;
+  notifyListeners();
+  }
+  else if(currentNum.length == 1)
+  {
+  double? currNum = double.tryParse(currentNum);
+  result /= currNum!;
+  notifyListeners();
+
+  }
 }
 
   String _getLastOperator()
