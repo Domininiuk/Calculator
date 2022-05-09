@@ -300,6 +300,6 @@ class _Operands extends StatelessWidget {
 
   void onDeletePressed(BuildContext context) {
     var calculations = context.read<CalculationsModel>();
-    calculations.removeLast();
+    calculations.deleteLast();
   }
 }

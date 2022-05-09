@@ -2,5 +2,6 @@
 
 class OperandModel
 {
+  String value = "";
 
 }

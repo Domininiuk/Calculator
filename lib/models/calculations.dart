@@ -12,49 +12,36 @@ class CalculationsModel extends ChangeNotifier {
   String currentNum = "";
   String actionsString = "";
 
-  // Numbers can only have one comma
-  // i.e. 5.5.5 - NOT ALLOWED
-  // 5.5 - ALLOWED
-  // CANNOT ADD OPERATOR IF THE PREVIOUS ACTION WAS A DOT
-
   void addOperand(String operand) {
-    if (_isOperandADot(operand) && !_isPreviousActionADigit())
-    {
-    }
-    else
-    {
+    if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
+    } else {
       if (_isOperandADot(operand) && currentNum.contains(".")) {
       } else {
         actionsString += operand;
         currentNum += operand;
 
-        //Hwo do I decide whether to append an operand to the last action or add a a new one?
         _addToActions(operand);
         notifyListeners();
       }
     }
 
-
-    // If currentNum and previousNum are not empty
-    // Find the latest operator
-    //    And the the calculations
-    //    Reset the currentNum and previousNum
-    if(previousNum.isNotEmpty && currentNum.isNotEmpty)
-    {
-     // if(operator == "+")
-      if(true)
-      {
+    //if(previousNum.isNotEmpty && currentNum.isNotEmpty)
+    if (currentNum.isNotEmpty) {
+      // if(operator == "+")
+      if (true) {
         _calculateTheSum();
       }
     }
   }
 
-  bool _isPreviousActionAnOperator()
-  {
+  bool _isPreviousActionAnOperator() {
     var previousAction = actions.last;
-    return previousAction == "+" || previousAction == "-" || previousAction == "x"
-        || previousAction == '÷';
+    return previousAction == "+" ||
+        previousAction == "-" ||
+        previousAction == "x" ||
+        previousAction == '÷';
   }
+
   bool _isOperandADot(String operand) {
     return operand == ".";
   }
@@ -77,51 +64,18 @@ class CalculationsModel extends ChangeNotifier {
   }
   //addAction
 
-
   // OPERAND OPERATOR OPERAND = RESULT SHOWN THEN OPERAND OPERATOR OPERAND
 
-
   void addOperator(String operator) {
+    if (!_wasPreviousActionAnOperator() &&
+        (actions.isNotEmpty || currentNum.isNotEmpty)) {
+      _updatePreviousNumber();
+      _clearCurrentNumber();
+      _addToActions(operator);
+      actionsString += operator;
 
-
-    
-
-    // somehow the third digit wasnt added to actions, because it was not in actions
-    //     This is a result of only adding numbers to Actions after pressing an operator
-    //     Here you press the operator, the number is stored correctly in currentNum,
-    //     but it doesnt pass any of the checks because the previous stored action was an operator
-    
-    /* Commented out because I want the result to be calculate when adding the operator
-    if(operator == "=" && (currentNumber.isNotEmpty|| actions.last == "="))
-      {
-        _addToActions(currentNumber);
-       // _addToActions(operator);
-        _calculateTheSum();
-        _clearCurrentNumber();
-        _updatePreviousNumber();
-      }
-
-
-     */
-
-
-    // The fourth
-    if (!_wasPreviousActionAnOperator() && (actions.isNotEmpty || currentNum.isNotEmpty))  {
-      /*
-        if(currentNum.isNotEmpty) {
-          _addToActions(currentNum);
-        }
-
-       */
-
-        _updatePreviousNumber();
-        _clearCurrentNumber();
-        _addToActions(operator);
-        actionsString += operator;
-
-        notifyListeners();
+      notifyListeners();
     }
-
   }
 
   bool _wasPreviousActionAnOperator() {
@@ -137,27 +91,57 @@ class CalculationsModel extends ChangeNotifier {
     return false;
   }
 
-  void _calculateTheSum()
-  {
+  // DONT CLEAR NUMBERS WHEN CALCULATING THE SUM, INSTEAD DOING WHEN ADDING OPERATOR
 
-    double? prevNum = double.tryParse(previousNum);
+  // I SHOULD SUM THE NUMBER THAT WAS ONLY RECENTLY ADDED, AND THE NUMBER THAT WAS PREVIOUSLY CALCULATED
+
+  // I NEED TO FIND A WAY TO DISTINGUISH MULTI DIGIT NUMBERS FROM SINGLE DIGIT NUMBERS
+  // THE WAY IT WORKS NOW IS THAT THE PROGRAM TREATS 99 AS 9+9
+  // MAYBE I SHOULD EXTRACT SOME LOGIC INTO THE OPRAND CLASS TO REDUCE COMPLEXITY?
+  //I COULD ADD A isSingleDigit property that would make it easier to work with?
+  void _calculateTheSum() {
+    if(currentNum.length >= 3)
+      {
+
+        sum -= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+        sum += double.tryParse(currentNum)!;
+        notifyListeners();
+
+      }
+    else if(currentNum.length == 2)
+      {
+        sum -=  double.tryParse(currentNum[0])!;
+
+        sum += double.tryParse(currentNum)!;
+        notifyListeners();
+      }
+    else if(currentNum.length == 1)
+      {
+        double? currNum = double.tryParse(currentNum);
+        sum += currNum!;
+        notifyListeners();
+
+      }
+    /*
+    //double? prevNum = double.tryParse(previousNum);
     double? currNum = double.tryParse(currentNum);
-    _resetNumbers();
 
-    sum += (currNum! + prevNum!);
-    notifyListeners();
+    //  sum += (currNum! + prevNum!);
+    sum += currNum!;
+
+     */
+   // notifyListeners();
   }
-// Its impossible to add operator after this because currentNumb
 
-  void _resetNumbers()
-  {
+  void _resetNumbers() {
     currentNum = "";
     previousNum = "";
   }
-  void _updatePreviousNumber()
-  {
+
+  void _updatePreviousNumber() {
     previousNum = currentNum;
   }
+
   void _clearCurrentNumber() {
     currentNum = "";
   }
@@ -166,7 +150,7 @@ class CalculationsModel extends ChangeNotifier {
     actions.add(action);
   }
 
-  void removeLast() {
+  void deleteLast() {
     if (actionsString.isNotEmpty) {
       _deleteLastFromActions();
       int index = actionsString.length - 1;
@@ -174,7 +158,7 @@ class CalculationsModel extends ChangeNotifier {
       if (_isActionADigit(actionsString[index]) && currentNum.isNotEmpty) {
         _deleteLastFromCurrentNumber();
       }
-      actionsString = actionsString.substring(0, index);
+      actionsString = actionsString.substring(0, index - 1);
 
       notifyListeners();
     }
@@ -201,10 +185,8 @@ class CalculationsModel extends ChangeNotifier {
 
   // if the last cahracter is a digit, delete it also from the currentNumber
   void _deleteLastFromActions() {
-    if(actions.isNotEmpty)
-      {
-        actions.removeLast();
-
-      }
+    if (actions.isNotEmpty) {
+      actions.removeLast();
+    }
   }
 }
