@@ -11,7 +11,7 @@ class CalculationsModel extends ChangeNotifier {
   String previousNum = "";
   String currentNum = "";
   String actionsString = "";
-
+  bool isFinished = false;
   void addOperand(String operand) {
     if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
     } else {
@@ -81,9 +81,24 @@ class CalculationsModel extends ChangeNotifier {
 
   // OPERAND OPERATOR OPERAND = RESULT SHOWN THEN OPERAND OPERATOR OPERAND
 
+
   void addOperator(String operator) {
+    if(isFinished)
+      {
+        isFinished = false;
+        _resetTexts();
+      }
     if (!_wasPreviousActionAnOperator() &&
         (actions.isNotEmpty || currentNum.isNotEmpty)) {
+      if (operator == "=") {
+        _updateTexts();
+        _clearCalculator();
+        isFinished = true;
+      }
+      else
+        {
+
+
       _updatePreviousNumber();
       _clearCurrentNumber();
       _addToActions(operator);
@@ -91,6 +106,41 @@ class CalculationsModel extends ChangeNotifier {
 
       notifyListeners();
     }
+    }
+  }
+  void _resetTexts()
+  {
+    _resetResultText();
+    _resetActionsText();
+    notifyListeners();
+  }
+  void _resetResultText()
+  {
+    result = 0.0;
+  }
+  void _resetActionsText()
+  {
+    actionsString = "";
+  }
+  void _updateTexts()
+  {
+    actionsString = result.toString();
+  }
+  void _clearCalculator()
+  {
+    _clearNumbers();
+    _clearActions();
+    notifyListeners();
+  }
+  void _clearNumbers()
+  {
+    previousNum = "";
+    currentNum = "";
+  }
+
+  void _clearActions()
+  {
+    actions.clear();
   }
 
   bool _wasPreviousActionAnOperator() {
@@ -99,21 +149,15 @@ class CalculationsModel extends ChangeNotifier {
       if (previousAction == 'x' ||
           previousAction == '-' ||
           previousAction == '+' ||
-          previousAction == '÷') {
+          previousAction == '÷'
+      ) {
         return true;
       }
     }
     return false;
   }
 
-  // DONT CLEAR NUMBERS WHEN CALCULATING THE SUM, INSTEAD DOING WHEN ADDING OPERATOR
 
-  // I SHOULD SUM THE NUMBER THAT WAS ONLY RECENTLY ADDED, AND THE NUMBER THAT WAS PREVIOUSLY CALCULATED
-
-  // I NEED TO FIND A WAY TO DISTINGUISH MULTI DIGIT NUMBERS FROM SINGLE DIGIT NUMBERS
-  // THE WAY IT WORKS NOW IS THAT THE PROGRAM TREATS 99 AS 9+9
-  // MAYBE I SHOULD EXTRACT SOME LOGIC INTO THE OPRAND CLASS TO REDUCE COMPLEXITY?
-  //I COULD ADD A isSingleDigit property that would make it easier to work with?
   void _calculateTheSum() {
     if(currentNum.length >= 3)
       {
@@ -237,6 +281,7 @@ void _calculateTheQuotient()
     actions.add(action);
   }
 
+  //update the sum only if the deleteted action was an operator
   void deleteLast() {
     if (actionsString.isNotEmpty) {
       _deleteLastFromActions();
@@ -251,7 +296,7 @@ void _calculateTheQuotient()
         }
       else
         {
-          actionsString = actionsString.substring(0, index - 1);
+          actionsString = actionsString.substring(0, index);
         }
 
       notifyListeners();

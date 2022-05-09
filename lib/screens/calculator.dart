@@ -30,8 +30,11 @@ class _Operands extends StatelessWidget {
             Consumer<CalculationsModel>(
                 builder: (context, calculations, child) {
               return Expanded(
-                child: Text(context.read<CalculationsModel>().result.toString(),
-                textScaleFactor: 3,),
+                child: Visibility(
+                  visible: !context.read<CalculationsModel>().isFinished,
+                  child: Text(context.read<CalculationsModel>().result.toString(),
+                  textScaleFactor: 3,),
+                ),
               );
             })
           ],
