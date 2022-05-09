@@ -1,18 +1,15 @@
 /*
 This model object represents a combination of all operands and operators
  */
-import 'package:calculator/models/action.dart';
-import 'package:calculator/models/operand.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class CalculationsModel extends ChangeNotifier {
   //
   double sum = 0;
   final List<String> actions = [];
-  String previousNumber = "";
-  String currentNumber = "";
+  String previousNum = "";
+  String currentNum = "";
   String actionsString = "";
 
   // Numbers can only have one comma
@@ -26,11 +23,13 @@ class CalculationsModel extends ChangeNotifier {
     }
     else
     {
-      if (_isOperandADot(operand) && currentNumber.contains(".")) {
+      if (_isOperandADot(operand) && currentNum.contains(".")) {
       } else {
         actionsString += operand;
-        currentNumber += operand;
-        //_addToActions(operand);
+        currentNum += operand;
+
+        //Hwo do I decide whether to append an operand to the last action or add a a new one?
+        _addToActions(operand);
         notifyListeners();
       }
     }
@@ -58,23 +57,57 @@ class CalculationsModel extends ChangeNotifier {
   }
   //addAction
 
-  void addOperator(String operator) {
-    // If the previous character was also an operator
-    //    Dont do anything
 
-    if(operator == "=" && currentNumber.isNotEmpty)
+  // OPERAND OPERATOR OPERAND = RESULT SHOWN THEN OPERAND OPERATOR OPERAND
+
+
+  void addOperator(String operator) {
+
+
+    
+
+    // somehow the third digit wasnt added to actions, because it was not in actions
+    //     This is a result of only adding numbers to Actions after pressing an operator
+    //     Here you press the operator, the number is stored correctly in currentNum,
+    //     but it doesnt pass any of the checks because the previous stored action was an operator
+    
+    /* Commented out because I want the result to be calculate when adding the operator
+    if(operator == "=" && (currentNumber.isNotEmpty|| actions.last == "="))
       {
+        _addToActions(currentNumber);
+       // _addToActions(operator);
         _calculateTheSum();
+        _clearCurrentNumber();
+        _updatePreviousNumber();
       }
 
 
-    else if (!_wasPreviousActionAnOperator() && (actions.isNotEmpty || currentNumber.isNotEmpty))  {
+     */
+
+
+    // The fourth
+    if (!_wasPreviousActionAnOperator() && (actions.isNotEmpty || currentNum.isNotEmpty))  {
+      /*
+        if(currentNum.isNotEmpty) {
+          _addToActions(currentNum);
+        }
+
+       */
+      if(previousNum.isNotEmpty && currentNum.isNotEmpty)
+        {
+          if(operator == "+")
+            {
+              _calculateTheSum();
+            }
+        }
+      else{
         _updatePreviousNumber();
         _clearCurrentNumber();
-        _addToActions(currentNumber);
-        _addToActions(operator);
-        actionsString += operator;
-        notifyListeners();
+      }
+       _addToActions(operator);
+       actionsString += operator;
+
+      notifyListeners();
     }
 
   }
@@ -94,24 +127,27 @@ class CalculationsModel extends ChangeNotifier {
 
   void _calculateTheSum()
   {
-    //Try to do addition for now?
-    // This means I need a previous number
-    double? prevNum = double.tryParse(previousNumber);
-    double? currNum = double.tryParse(currentNumber);
+
+    double? prevNum = double.tryParse(previousNum);
+    double? currNum = double.tryParse(currentNum);
+    _resetNumbers();
 
     sum = (currNum! + prevNum!);
-    actionsString = sum.toString();
-
     notifyListeners();
-    // Go through each action?
   }
+// Its impossible to add operator after this because currentNumb
 
+  void _resetNumbers()
+  {
+    currentNum = "";
+    previousNum = "";
+  }
   void _updatePreviousNumber()
   {
-    previousNumber = currentNumber;
+    previousNum = currentNum;
   }
   void _clearCurrentNumber() {
-    currentNumber = "";
+    currentNum = "";
   }
 
   void _addToActions(String action) {
@@ -123,7 +159,7 @@ class CalculationsModel extends ChangeNotifier {
       _deleteLastFromActions();
       int index = actionsString.length - 1;
 
-      if (_isActionADigit(actionsString[index]) && currentNumber.isNotEmpty) {
+      if (_isActionADigit(actionsString[index]) && currentNum.isNotEmpty) {
         _deleteLastFromCurrentNumber();
       }
       actionsString = actionsString.substring(0, index);
@@ -146,9 +182,9 @@ class CalculationsModel extends ChangeNotifier {
   }
 
   void _deleteLastFromCurrentNumber() {
-    int index = currentNumber.length - 1;
+    int index = currentNum.length - 1;
 
-    currentNumber = currentNumber.substring(0, index);
+    currentNum = currentNum.substring(0, index);
   }
 
   // if the last cahracter is a digit, delete it also from the currentNumber
