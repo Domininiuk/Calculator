@@ -33,8 +33,28 @@ class CalculationsModel extends ChangeNotifier {
         notifyListeners();
       }
     }
+
+
+    // If currentNum and previousNum are not empty
+    // Find the latest operator
+    //    And the the calculations
+    //    Reset the currentNum and previousNum
+    if(previousNum.isNotEmpty && currentNum.isNotEmpty)
+    {
+     // if(operator == "+")
+      if(true)
+      {
+        _calculateTheSum();
+      }
+    }
   }
 
+  bool _isPreviousActionAnOperator()
+  {
+    var previousAction = actions.last;
+    return previousAction == "+" || previousAction == "-" || previousAction == "x"
+        || previousAction == '÷';
+  }
   bool _isOperandADot(String operand) {
     return operand == ".";
   }
@@ -93,32 +113,24 @@ class CalculationsModel extends ChangeNotifier {
         }
 
        */
-      if(previousNum.isNotEmpty && currentNum.isNotEmpty)
-        {
-          if(operator == "+")
-            {
-              _calculateTheSum();
-            }
-        }
-      else{
+
         _updatePreviousNumber();
         _clearCurrentNumber();
-      }
-       _addToActions(operator);
-       actionsString += operator;
+        _addToActions(operator);
+        actionsString += operator;
 
-      notifyListeners();
+        notifyListeners();
     }
 
   }
 
   bool _wasPreviousActionAnOperator() {
     if (actions.isNotEmpty) {
-      var last = actions.last;
-      if (last == 'x' ||
-          last == '-' ||
-          last == '+' ||
-          last == '÷') {
+      var previousAction = actions.last;
+      if (previousAction == 'x' ||
+          previousAction == '-' ||
+          previousAction == '+' ||
+          previousAction == '÷') {
         return true;
       }
     }
@@ -132,7 +144,7 @@ class CalculationsModel extends ChangeNotifier {
     double? currNum = double.tryParse(currentNum);
     _resetNumbers();
 
-    sum = (currNum! + prevNum!);
+    sum += (currNum! + prevNum!);
     notifyListeners();
   }
 // Its impossible to add operator after this because currentNumb
