@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class CalculationsModel extends ChangeNotifier {
   //
-  double sum = 0;
+  double result = 0;
   final List<String> actions = [];
   String previousNum = "";
   String currentNum = "";
@@ -28,18 +28,33 @@ class CalculationsModel extends ChangeNotifier {
     //if(previousNum.isNotEmpty && currentNum.isNotEmpty)
     if (currentNum.isNotEmpty) {
       // if(operator == "+")
-      if (true) {
-        _calculateTheSum();
+      switch(_getLastOperator())
+      {
+        case "+":
+          _calculateTheSum();
+          break;
+        case "-":
+          _calculateTheDifference();
+          break;
+        case "x":
+          _calculateTheProduct();
+          break;
+        case "÷":
+          _calculateTheQuotient();
+          break;
+        default:
+          _calculateTheSum();
+          break;
       }
+
     }
   }
 
-  bool _isPreviousActionAnOperator() {
-    var previousAction = actions.last;
-    return previousAction == "+" ||
-        previousAction == "-" ||
-        previousAction == "x" ||
-        previousAction == '÷';
+  bool _isActionAnOperator(String action) {
+    return action == "+" ||
+        action == "-" ||
+        action == "x" ||
+        action == '÷';
   }
 
   bool _isOperandADot(String operand) {
@@ -103,41 +118,71 @@ class CalculationsModel extends ChangeNotifier {
     if(currentNum.length >= 3)
       {
 
-        sum -= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-        sum += double.tryParse(currentNum)!;
+        result -= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+        result += double.tryParse(currentNum)!;
         notifyListeners();
 
       }
     else if(currentNum.length == 2)
       {
-        sum -=  double.tryParse(currentNum[0])!;
+        result -=  double.tryParse(currentNum[0])!;
 
-        sum += double.tryParse(currentNum)!;
+        result += double.tryParse(currentNum)!;
         notifyListeners();
       }
     else if(currentNum.length == 1)
       {
         double? currNum = double.tryParse(currentNum);
-        sum += currNum!;
+        result += currNum!;
         notifyListeners();
 
       }
-    /*
-    //double? prevNum = double.tryParse(previousNum);
-    double? currNum = double.tryParse(currentNum);
-
-    //  sum += (currNum! + prevNum!);
-    sum += currNum!;
-
-     */
-   // notifyListeners();
   }
+  void _calculateTheDifference()
+  {
+    if(currentNum.length >= 3)
+    {
 
-  void _resetNumbers() {
-    currentNum = "";
-    previousNum = "";
+      result += double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+      result -= double.tryParse(currentNum)!;
+      notifyListeners();
+
+    }
+    else if(currentNum.length == 2)
+    {
+      result +=  double.tryParse(currentNum[0])!;
+
+      result -= double.tryParse(currentNum)!;
+      notifyListeners();
+    }
+    else if(currentNum.length == 1)
+    {
+      double? currNum = double.tryParse(currentNum);
+      result -= currNum!;
+      notifyListeners();
+
+    }
   }
+void _calculateTheProduct()
+{
 
+}
+void _calculateTheQuotient()
+{
+
+}
+
+  String _getLastOperator()
+  {
+    for(var i = actions.length - 1; i>= 0; i--)
+      {
+        if(_isActionAnOperator(actions[i]))
+          {
+            return actions[i];
+          }
+      }
+    return "";
+  }
   void _updatePreviousNumber() {
     previousNum = currentNum;
   }
@@ -158,7 +203,14 @@ class CalculationsModel extends ChangeNotifier {
       if (_isActionADigit(actionsString[index]) && currentNum.isNotEmpty) {
         _deleteLastFromCurrentNumber();
       }
-      actionsString = actionsString.substring(0, index - 1);
+      if(index == 0)
+        {
+          actionsString = "";
+        }
+      else
+        {
+          actionsString = actionsString.substring(0, index - 1);
+        }
 
       notifyListeners();
     }
@@ -189,4 +241,6 @@ class CalculationsModel extends ChangeNotifier {
       actions.removeLast();
     }
   }
+
+
 }
