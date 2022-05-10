@@ -25,6 +25,7 @@ class _Operands extends StatelessWidget {
     return Container(
       child:
           Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+
         Row(
           children: [
             Consumer<CalculationsModel>(
@@ -33,7 +34,7 @@ class _Operands extends StatelessWidget {
                 child: Visibility(
                   visible: !context.read<CalculationsModel>().isFinished,
                   child: Text(context.read<CalculationsModel>().result.toString(),
-                  textScaleFactor: 3,),
+                  textScaleFactor: 3.3,),
                 ),
               );
             })
