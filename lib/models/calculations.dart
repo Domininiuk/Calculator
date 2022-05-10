@@ -205,16 +205,21 @@ class CalculationsModel extends ChangeNotifier {
   // When dividing by zero give an error Division by zero is undefined
   void _calculateTheProduct() {
     if (currentNum.length >= 3) {
-      if(currentNum.substring(0, currentNum.length - 1) == "0." && !_isCurrentNumAllZeroes())
+      if(currentNum.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
       {
         result = formerResult;
+        result *= double.tryParse(currentNum)!;
+        notifyListeners();
+      }
+      else if(_isCurrentNumAllZeroes())
+      {
       }
       else
         {
         result /= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+        result *= double.tryParse(currentNum)!;
+        notifyListeners();
         }
-      result *= double.tryParse(currentNum)!;
-      notifyListeners();
     } else if (currentNum.length == 2) {
       if (currentNum[0] == "0") {
         // It already has been multiplied by 0. no need to do anything
