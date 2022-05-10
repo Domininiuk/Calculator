@@ -208,7 +208,6 @@ class CalculationsModel extends ChangeNotifier {
       if(currentNum.substring(0, currentNum.length - 1) == "0." && !_isCurrentNumAllZeroes())
       {
         result = formerResult;
-
       }
       else
         {
@@ -242,18 +241,24 @@ class CalculationsModel extends ChangeNotifier {
   //CANNOT DIVIDE BY 0
   void _calculateTheQuotient() {
     if (currentNum.length >= 3) {
-      if(currentNum.substring(0, currentNum.length - 1) == "0." && !_isCurrentNumAllZeroes())
+      //if
+      if(currentNum.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
         {
           result = formerResult;
           result /= double.tryParse(currentNum)!;
+          notifyListeners();
         }
-      else
+      else if(_isCurrentNumAllZeroes())
         {
-          result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-
+         // result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+         // result /= double.tryParse(currentNum)!;
+         // notifyListeners();
         }
-      result /= double.tryParse(currentNum)!;
-      notifyListeners();
+      else{
+         result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+         result /= double.tryParse(currentNum)!;
+        notifyListeners();
+      }
     } else if (currentNum.length == 2) {
       if(currentNum[0]== "0")
         {

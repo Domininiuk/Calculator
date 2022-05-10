@@ -74,234 +74,282 @@ class _Calculator extends StatelessWidget {
         ),
         Row(
           children: <Widget>[
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                    style: operandButtonTheme,
+                    child: Text(
+                      '1',
+                      textScaleFactor: 2.0,
+                    ),
+                    onPressed: () {
+                      onOperandPressed(context, '1');
+                    }),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
                   style: operandButtonTheme,
                   child: Text(
-                    '1',
+                    '2',
                     textScaleFactor: 2.0,
                   ),
                   onPressed: () {
-                    onOperandPressed(context, '1');
-                  }),
-            ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '2',
-                  textScaleFactor: 2.0,
+                    onOperandPressed(context, '2');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '2');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '3',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '3',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '3');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '3');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                child: Text(
-                  '÷',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  child: Text(
+                    '÷',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperatorPressed(context, '÷');
+                  },
                 ),
-                onPressed: () {
-                  onOperatorPressed(context, '÷');
-                },
               ),
             ),
           ],
         ),
         Row(
           children: <Widget>[
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '4',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '4',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '4');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '4');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '5',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '5',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '5');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '5');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '6',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '6',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '6');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '6');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                child: Text(
-                  'x',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  child: Text(
+                    'x',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperatorPressed(context, 'x');
+                  },
                 ),
-                onPressed: () {
-                  onOperatorPressed(context, 'x');
-                },
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '7',
-                  textScaleFactor: 2.0,
-                ),
-                onPressed: () {
-                  onOperandPressed(context, '7');
-                },
-              ),
-            ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '8',
-                  textScaleFactor: 2.0,
-                ),
-                onPressed: () {
-                  onOperandPressed(context, '8');
-                },
-              ),
-            ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '9',
-                  textScaleFactor: 2.0,
-                ),
-                onPressed: () {
-                  onOperandPressed(context, '9');
-                },
-              ),
-            ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                child: Text(
-                  '-',
-                  textScaleFactor: 2.0,
-                ),
-                onPressed: () {
-                  onOperatorPressed(context, '-');
-                },
               ),
             ),
           ],
         ),
         Row(
           children: <Widget>[
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '.',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '7',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '7');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '.');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                style: operandButtonTheme,
-                child: Text(
-                  '0',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '8',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '8');
+                  },
                 ),
-                onPressed: () {
-                  onOperandPressed(context, '0');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                child: const Text(
-                  '=',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '9',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '9');
+                  },
                 ),
-                onPressed: () {
-                  onOperatorPressed(context, '=');
-                },
               ),
             ),
-            SizedBox(
-              height: 90.0,
-              width: 90.0,
-              child: OutlinedButton(
-                child: Text(
-                  '+',
-                  textScaleFactor: 2.0,
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  child: Text(
+                    '-',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperatorPressed(context, '-');
+                  },
                 ),
-                onPressed: () {
-                  onOperatorPressed(context, '+');
-                },
+              ),
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '.',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '.');
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  style: operandButtonTheme,
+                  child: Text(
+                    '0',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperandPressed(context, '0');
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  child: const Text(
+                    '=',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperatorPressed(context, '=');
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: SizedBox(
+                height: 90.0,
+                width: 90.0,
+                child: OutlinedButton(
+                  child: Text(
+                    '+',
+                    textScaleFactor: 2.0,
+                  ),
+                  onPressed: () {
+                    onOperatorPressed(context, '+');
+                  },
+                ),
               ),
             ),
           ],
