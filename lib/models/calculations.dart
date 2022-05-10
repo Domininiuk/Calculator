@@ -239,20 +239,43 @@ class CalculationsModel extends ChangeNotifier {
     }
   }
 
+  //CANNOT DIVIDE BY 0
   void _calculateTheQuotient() {
     if (currentNum.length >= 3) {
-      result *=
-          double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+      if(currentNum.substring(0, currentNum.length - 1) == "0." && !_isCurrentNumAllZeroes())
+        {
+          result = formerResult;
+          result /= double.tryParse(currentNum)!;
+        }
+      else
+        {
+          result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
+
+        }
       result /= double.tryParse(currentNum)!;
       notifyListeners();
     } else if (currentNum.length == 2) {
-      result *= double.tryParse(currentNum[0])!;
+      if(currentNum[0]== "0")
+        {
 
-      result /= double.tryParse(currentNum)!;
-      notifyListeners();
+        }
+      else {
+        result *= double.tryParse(currentNum[0])!;
+
+        result /= double.tryParse(currentNum)!;
+        notifyListeners();
+      }
     } else if (currentNum.length == 1) {
       double? currNum = double.tryParse(currentNum);
-      result /= currNum!;
+      if(currNum == 0)
+        {
+          formerResult = result;
+          //CANNOT DIVIDE BY 0 (HERE WOULD BE AN ERROR MESSAGE)
+        }
+      else
+        {
+          result /= currNum!;
+        }
       notifyListeners();
     }
   }
