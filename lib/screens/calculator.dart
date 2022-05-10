@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 
+import '../common/theme.dart';
+
 class Calculator extends StatelessWidget {
   const Calculator({Key? key}) : super(key: key);
 
@@ -15,17 +17,16 @@ class Calculator extends StatelessWidget {
           'Calculator',
           style: Theme.of(context).textTheme.headline1,
         )),
-        body: _Operands());
+        body: _Calculator());
   }
 }
 
-class _Operands extends StatelessWidget {
+class _Calculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       child:
           Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
-
         Row(
           children: [
             Consumer<CalculationsModel>(
@@ -33,8 +34,11 @@ class _Operands extends StatelessWidget {
               return Expanded(
                 child: Visibility(
                   visible: !context.read<CalculationsModel>().isFinished,
-                  child: Text(context.read<CalculationsModel>().result.toString(),
-                  textScaleFactor: 3.3,),
+                  child: Text(
+                    context.read<CalculationsModel>().result.toString(),
+                    textScaleFactor: 3.3,
+                    style: TextStyle(),
+                  ),
                 ),
               );
             })
@@ -48,13 +52,16 @@ class _Operands extends StatelessWidget {
                   child: Text(
                 context.read<CalculationsModel>().actionsString.toString(),
                 textScaleFactor: 3.0,
+                style: TextStyle(
+                  color: Colors.black.withOpacity(0.5),
+                ),
               ));
             }),
             SizedBox(
               height: 60.0,
               width: 120.0,
               child: OutlinedButton(
-                child: Text(
+                child: const Text(
                   'DELETE',
                   textScaleFactor: 1.5,
                 ),
@@ -71,6 +78,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                  style: operandButtonTheme,
                   child: Text(
                     '1',
                     textScaleFactor: 2.0,
@@ -83,6 +91,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '2',
                   textScaleFactor: 2.0,
@@ -96,6 +105,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '3',
                   textScaleFactor: 2.0,
@@ -126,6 +136,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '4',
                   textScaleFactor: 2.0,
@@ -139,6 +150,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '5',
                   textScaleFactor: 2.0,
@@ -152,6 +164,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '6',
                   textScaleFactor: 2.0,
@@ -182,6 +195,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '7',
                   textScaleFactor: 2.0,
@@ -195,6 +209,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '8',
                   textScaleFactor: 2.0,
@@ -208,6 +223,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '9',
                   textScaleFactor: 2.0,
@@ -238,6 +254,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '.',
                   textScaleFactor: 2.0,
@@ -251,6 +268,7 @@ class _Operands extends StatelessWidget {
               height: 90.0,
               width: 90.0,
               child: OutlinedButton(
+                style: operandButtonTheme,
                 child: Text(
                   '0',
                   textScaleFactor: 2.0,
