@@ -27,6 +27,12 @@ class CalculationsModel extends ChangeNotifier {
 
   void addOperand(String operand) {
     isSameNumber = true;
+    if(isFinished)
+      {
+        result = 0.0;
+        isFinished = false;
+        notifyListeners();
+      }
     if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
     } else {
       if (_isOperandADot(operand) && currentNum.contains(".")) {
@@ -94,16 +100,17 @@ class CalculationsModel extends ChangeNotifier {
     isSameNumber = false;
     formerResult = 0.0;
 
-    if (isFinished) {
-      isFinished = false;
-      _resetTexts();
+    if (operator == "=") {
+      _clearCalculator();
+      isFinished = true;
+      notifyListeners();
     }
     if (!_wasPreviousActionAnOperator() &&
         (actions.isNotEmpty || currentNum.isNotEmpty)) {
       if (operator == "=") {
-        _updateTexts();
         _clearCalculator();
         isFinished = true;
+        notifyListeners();
       } else {
         _updatePreviousNumber();
         _clearCurrentNumber();
@@ -116,7 +123,6 @@ class CalculationsModel extends ChangeNotifier {
   }
 
   void _resetTexts() {
-    _resetResultText();
     _resetActionsText();
     notifyListeners();
   }
@@ -146,6 +152,7 @@ class CalculationsModel extends ChangeNotifier {
 
   void _clearActions() {
     actions.clear();
+    actionsString = "";
   }
 
   bool _wasPreviousActionAnOperator() {
