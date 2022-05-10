@@ -65,11 +65,14 @@ class _Calculator extends StatelessWidget {
         padding: const EdgeInsets.only(left: 2.0),
         child: Row(
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: SizedBox(
-                height: 60.0,
-                width: 120.0,
+            const Spacer(),
+            const Spacer(
+
+            ),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
                 child: OutlinedButton(
                   style: deleteButtonTheme,
                   child: const Text(
