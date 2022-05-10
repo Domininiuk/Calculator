@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/models/calculations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -31,9 +32,11 @@ class _Calculator extends StatelessWidget {
         return Expanded(
           child: Visibility(
             visible: true,
-            child: Text(
+            child: AutoSizeText(
               context.read<CalculationsModel>().result.toString(),
               textScaleFactor: 3.3,
+              maxLines: 3,
+              minFontSize: 2.0,
               style: const TextStyle(),
             ),
           ),
@@ -53,9 +56,11 @@ class _Calculator extends StatelessWidget {
       Consumer<CalculationsModel>(
             builder: (context, calculations, child) {
           return Expanded(
-              child: Text(
+              child: AutoSizeText(
             context.read<CalculationsModel>().actionsString.toString(),
             textScaleFactor: 3.0,
+            maxLines: 3,
+            minFontSize: 2.0,
             style: TextStyle(
               color: Colors.black.withOpacity(0.5),
             ),
