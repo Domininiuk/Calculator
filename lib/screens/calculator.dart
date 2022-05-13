@@ -32,7 +32,7 @@ class _Calculator extends StatelessWidget {
               child: Visibility(
                 visible: true,
                 child: AutoSizeText(
-                  context.read<CalculationsModel>().result.toString(),
+                  context.read<CalculationsModel>().resultOfCalculations.toString(),
                   textScaleFactor: 3.3,
                   maxLines: 3,
                   minFontSize: 2.0,
@@ -52,7 +52,7 @@ class _Calculator extends StatelessWidget {
           builder: (context, calculations, child) {
             return Expanded(
                 child: AutoSizeText(
-                  context.read<CalculationsModel>().actionsString.toString(),
+                  context.read<CalculationsModel>().displayedActions.toString(),
                   textScaleFactor: 3.0,
                   maxLines: 5,
                   minFontSize: 2.0,

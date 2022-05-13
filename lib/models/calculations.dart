@@ -1,44 +1,39 @@
 /*
 This model object represents a combination of all operands and operators
  */
+import 'package:calculator/models/multiplication_processor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CalculationsModel extends ChangeNotifier {
   //
-  double result = 0;
+  double resultOfCalculations = 0;
   double formerResult = 0;
+  
+  
+  
   bool isSameNumber = false;
-
-
- // Add a a same number boolean
- // that is set to false when adding oeprator or deleting
- // and is set to true when adding a digit
-
-  //add a double formerResult that stores the value of result before multiplication to 0. I think its going to be difficult to implement delete last
-
-
   final List<String> actions = [];
-  String previousNum = "";
-  String currentNum = "";
-  String actionsString = "";
-  String deleted = "";
-  bool isFinished = false;
+  String previousNumber = "";
+  String currentNumber = "";
+  String displayedActions = "";
+  String deletedActions = "";
+  bool hasEqualButtonBeenPressed = false;
 
   void addOperand(String operand) {
     isSameNumber = true;
-    if(isFinished)
+    if(hasEqualButtonBeenPressed)
       {
-        result = 0.0;
-        isFinished = false;
+        resultOfCalculations = 0.0;
+        hasEqualButtonBeenPressed = false;
         notifyListeners();
       }
     if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
     } else {
-      if (_isOperandADot(operand) && currentNum.contains(".")) {
+      if (_isOperandADot(operand) && currentNumber.contains(".")) {
       } else {
-        actionsString += operand;
-        currentNum += operand;
+        displayedActions += operand;
+        currentNumber += operand;
 
         _addToActions(operand);
         notifyListeners();
@@ -46,7 +41,7 @@ class CalculationsModel extends ChangeNotifier {
     }
 
     //if(previousNum.isNotEmpty && currentNum.isNotEmpty)
-    if (currentNum.isNotEmpty) {
+    if (currentNumber.isNotEmpty) {
       // if(operator == "+")
       switch (_getLastOperator()) {
         case "+":
@@ -56,7 +51,10 @@ class CalculationsModel extends ChangeNotifier {
           _calculateTheDifference();
           break;
         case "x":
-          _calculateTheProduct();
+          MultiplicationProcessor processor = MultiplicationProcessor();
+          processor.process(currentNumber, resultOfCalculations, formerResult);
+          resultOfCalculations = processor.process(currentNumber, resultOfCalculations, formerResult);
+          notifyListeners();
           break;
         case "÷":
           _calculateTheQuotient();
@@ -102,42 +100,29 @@ class CalculationsModel extends ChangeNotifier {
 
     if (operator == "=") {
       _clearCalculator();
-      isFinished = true;
+      hasEqualButtonBeenPressed = true;
       notifyListeners();
     }
     if (!_wasPreviousActionAnOperator() &&
-        (actions.isNotEmpty || currentNum.isNotEmpty)) {
+        (actions.isNotEmpty || currentNumber.isNotEmpty)) {
       if (operator == "=") {
         _clearCalculator();
-        isFinished = true;
+        hasEqualButtonBeenPressed = true;
         notifyListeners();
       } else {
         _updatePreviousNumber();
         _clearCurrentNumber();
         _addToActions(operator);
-        actionsString += operator;
+        displayedActions += operator;
 
         notifyListeners();
       }
     }
   }
 
-  void _resetTexts() {
-    _resetActionsText();
-    notifyListeners();
-  }
 
-  void _resetResultText() {
-    result = 0.0;
-  }
 
-  void _resetActionsText() {
-    actionsString = "";
-  }
 
-  void _updateTexts() {
-    actionsString = result.toString();
-  }
 
   void _clearCalculator() {
     _clearNumbers();
@@ -146,13 +131,13 @@ class CalculationsModel extends ChangeNotifier {
   }
 
   void _clearNumbers() {
-    previousNum = "";
-    currentNum = "";
+    previousNumber = "";
+    currentNumber = "";
   }
 
   void _clearActions() {
     actions.clear();
-    actionsString = "";
+    displayedActions = "";
   }
 
   bool _wasPreviousActionAnOperator() {
@@ -170,52 +155,58 @@ class CalculationsModel extends ChangeNotifier {
 
 
   void _calculateTheSum() {
-    if (currentNum.length >= 3) {
-      result -=
-          double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-      result += double.tryParse(currentNum)!;
+    if (currentNumber.length >= 3) {
+      resultOfCalculations -=
+          double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
+      resultOfCalculations += double.tryParse(currentNumber)!;
       notifyListeners();
-    } else if (currentNum.length == 2) {
-      result -= double.tryParse(currentNum[0])!;
+    } else if (currentNumber.length == 2) {
+      resultOfCalculations -= double.tryParse(currentNumber[0])!;
 
-      result += double.tryParse(currentNum)!;
+      resultOfCalculations += double.tryParse(currentNumber)!;
       notifyListeners();
-    } else if (currentNum.length == 1) {
-      double? currNum = double.tryParse(currentNum);
-      result += currNum!;
+    } else if (currentNumber.length == 1) {
+      double? currNum = double.tryParse(currentNumber);
+      resultOfCalculations += currNum!;
       notifyListeners();
     }
   }
 
   void _calculateTheDifference() {
-    if (currentNum.length >= 3) {
-      result +=
-          double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-      result -= double.tryParse(currentNum)!;
+    if (currentNumber.length >= 3) {
+      resultOfCalculations +=
+          double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
+      resultOfCalculations -= double.tryParse(currentNumber)!;
       notifyListeners();
-    } else if (currentNum.length == 2) {
-      result += double.tryParse(currentNum[0])!;
+    } else if (currentNumber.length == 2) {
+      resultOfCalculations += double.tryParse(currentNumber[0])!;
 
-      result -= double.tryParse(currentNum)!;
+      resultOfCalculations -= double.tryParse(currentNumber)!;
       notifyListeners();
-    } else if (currentNum.length == 1) {
-      double? currNum = double.tryParse(currentNum);
-      result -= currNum!;
+    } else if (currentNumber.length == 1) {
+      double? currNum = double.tryParse(currentNumber);
+      resultOfCalculations -= currNum!;
       notifyListeners();
     }
   }
 
   bool _isCurrentNumAllZeroes()
   {
-    return !currentNum.contains(RegExp(r'[1-9]')) && currentNum.contains("0");
+    return !currentNumber.contains(RegExp(r'[1-9]')) && currentNumber.contains("0");
   }
-  // When dividing by zero give an error Division by zero is undefined
+
+
+//  I think I could extract the logic of the _calculate methods to a different class.
+  // Calculations is already complicated enough, no need to make it even harder
+  // I want the CalculationsModel class to only tell other objects what to do. I do not want it to do any processing of its own
+  // Maybe a Calculator class? But there already is a calculator class. Some variation of "Processor"?
+
   void _calculateTheProduct() {
-    if (currentNum.length >= 3) {
-      if(currentNum.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
+    if (currentNumber.length >= 3) {
+      if(currentNumber.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
       {
-        result = formerResult;
-        result *= double.tryParse(currentNum)!;
+        resultOfCalculations = formerResult;
+        resultOfCalculations *= double.tryParse(currentNumber)!;
         notifyListeners();
       }
       else if(_isCurrentNumAllZeroes())
@@ -223,75 +214,72 @@ class CalculationsModel extends ChangeNotifier {
       }
       else
         {
-        result /= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-        result *= double.tryParse(currentNum)!;
+        resultOfCalculations /= double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
+        resultOfCalculations *= double.tryParse(currentNumber)!;
         notifyListeners();
         }
-    } else if (currentNum.length == 2) {
-      if (currentNum[0] == "0") {
+    } else if (currentNumber.length == 2) {
+      if (currentNumber[0] == "0") {
         // It already has been multiplied by 0. no need to do anything
 
       } else {
-        result /= double.tryParse(currentNum[0])!;
+        resultOfCalculations /= double.tryParse(currentNumber[0])!;
         //formerResult = result;
-        result *= double.tryParse(currentNum)!;
+        resultOfCalculations *= double.tryParse(currentNumber)!;
         notifyListeners();
       }
-      result *= double.tryParse(currentNum)!;
+      resultOfCalculations *= double.tryParse(currentNumber)!;
       notifyListeners();
-    } else if (currentNum.length == 1) {
-      double? currNum = double.tryParse(currentNum);
-      if(currNum == 0)
+    } else if (currentNumber.length == 1) {
+      double? parsedCurrentNumber = double.tryParse(currentNumber);
+      if(parsedCurrentNumber == 0)
         {
-          formerResult = result;
+          formerResult = resultOfCalculations;
         }
-      result *= currNum!;
+      resultOfCalculations *= parsedCurrentNumber!;
       notifyListeners();
     }
   }
 
   //CANNOT DIVIDE BY 0
   void _calculateTheQuotient() {
-    if (currentNum.length >= 3) {
+    if (currentNumber.length >= 3) {
       //if
-      if(currentNum.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
+      if(currentNumber.substring(0, 2) == "0." && !_isCurrentNumAllZeroes())
         {
-          result = formerResult;
-          result /= double.tryParse(currentNum)!;
+          resultOfCalculations = formerResult;
+          resultOfCalculations /= double.tryParse(currentNumber)!;
           notifyListeners();
         }
       else if(_isCurrentNumAllZeroes())
         {
-         // result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-         // result /= double.tryParse(currentNum)!;
-         // notifyListeners();
+
         }
       else{
-         result *= double.tryParse(currentNum.substring(0, currentNum.length - 1))!;
-         result /= double.tryParse(currentNum)!;
+         resultOfCalculations *= double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
+         resultOfCalculations /= double.tryParse(currentNumber)!;
         notifyListeners();
       }
-    } else if (currentNum.length == 2) {
-      if(currentNum[0]== "0")
+    } else if (currentNumber.length == 2) {
+      if(currentNumber[0]== "0")
         {
 
         }
       else {
-        result *= double.tryParse(currentNum[0])!;
+        resultOfCalculations *= double.tryParse(currentNumber[0])!;
 
-        result /= double.tryParse(currentNum)!;
+        resultOfCalculations /= double.tryParse(currentNumber)!;
         notifyListeners();
       }
-    } else if (currentNum.length == 1) {
-      double? currNum = double.tryParse(currentNum);
+    } else if (currentNumber.length == 1) {
+      double? currNum = double.tryParse(currentNumber);
       if(currNum == 0)
         {
-          formerResult = result;
-          //CANNOT DIVIDE BY 0 (HERE WOULD BE AN ERROR MESSAGE)
+          formerResult = resultOfCalculations;
         }
       else
         {
-          result /= currNum!;
+          resultOfCalculations /= currNum!;
         }
       notifyListeners();
     }
@@ -307,31 +295,29 @@ class CalculationsModel extends ChangeNotifier {
   }
 
   void _updatePreviousNumber() {
-    previousNum = currentNum;
+    previousNumber = currentNumber;
   }
 
   void _clearCurrentNumber() {
-    currentNum = "";
+    currentNumber = "";
   }
 
   void _addToActions(String action) {
     actions.add(action);
   }
 
-  // Basically to update the sum when deleting you have do calculations, kind of like the reverse of calculators
-
   void deleteLast() {
-    if (actionsString.isNotEmpty) {
-      _deleteLastFromActions();
-      int index = actionsString.length - 1;
+    if (displayedActions.isNotEmpty) {
+      _deleteLastAction();
+      int index = displayedActions.length - 1;
 
-      if (_isActionADigit(actionsString[index]) && currentNum.isNotEmpty) {
-        _deleteLastFromCurrentNumber();
+      if (_isActionADigit(displayedActions[index]) && currentNumber.isNotEmpty) {
+        _deleteLastDigitFromCurrentNumber();
       }
       if (index == 0) {
-        actionsString = "";
+        displayedActions = "";
       } else {
-        actionsString = actionsString.substring(0, index);
+        displayedActions = displayedActions.substring(0, index);
       }
 
       notifyListeners();
@@ -351,14 +337,14 @@ class CalculationsModel extends ChangeNotifier {
         action == '0';
   }
 
-  void _deleteLastFromCurrentNumber() {
-    int index = currentNum.length - 1;
+  void _deleteLastDigitFromCurrentNumber() {
+    int index = currentNumber.length - 1;
 
-    currentNum = currentNum.substring(0, index);
+    currentNumber = currentNumber.substring(0, index);
   }
 
-  // if the last cahracter is a digit, delete it also from the currentNumber
-  void _deleteLastFromActions() {
+  // if the last character is a digit, delete it also from the currentNumber
+  void _deleteLastAction() {
     if (actions.isNotEmpty) {
       actions.removeLast();
     }
