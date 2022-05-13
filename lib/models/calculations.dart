@@ -1,7 +1,8 @@
 /*
 This model object represents a combination of all operands and operators
  */
-import 'package:calculator/models/multiplication_processor.dart';
+import 'package:calculator/models/processors/division_processor.dart';
+import 'package:calculator/models/processors/multiplication_processor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -52,12 +53,13 @@ class CalculationsModel extends ChangeNotifier {
           break;
         case "x":
           MultiplicationProcessor processor = MultiplicationProcessor();
-          processor.process(currentNumber, resultOfCalculations, formerResult);
           resultOfCalculations = processor.process(currentNumber, resultOfCalculations, formerResult);
           notifyListeners();
           break;
         case "÷":
-          _calculateTheQuotient();
+          DivisionProcessor processor = DivisionProcessor();
+          resultOfCalculations = processor.process(currentNumber, resultOfCalculations, formerResult);
+          notifyListeners();
           break;
         default:
           _calculateTheSum();
