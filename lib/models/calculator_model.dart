@@ -16,8 +16,8 @@ class CalculatorModel extends ChangeNotifier {
   CalculationsModel calculations = CalculationsModel.createEmptyModel();
   bool isSameNumber = false;
   final List<String> actions = [];
-String deletedDigits = "";
-String previousNumber = "";
+  String deletedDigits = "";
+  String previousNumber = "";
   String displayedActions = "";
   //String lastOperator = "";
   bool hasEqualButtonBeenPressed = false;
@@ -88,11 +88,10 @@ String previousNumber = "";
     }
     return false;
   }
-  
-  
+
   void addOperator(String operator) {
     isSameNumber = false;
-    
+
     calculations.formerResult = 0.0;
 
     if (operator == "=") {
@@ -212,50 +211,14 @@ String previousNumber = "";
     if (displayedActions.isNotEmpty) {
       int index = displayedActions.length - 1;
 
-
-
-
-
-
       if (_isActionADigit(displayedActions[index]) &&
           (calculations.currentNumber.isNotEmpty || deletedDigits.isNotEmpty)) {
-
-        // Only works for single digit numbers
-        // Need to find a way to collect the full number
-        // So basically... this really is like the processor classes just in reverse.
-        // But... I can still use the processor classes for this. just use opposite ones?
-        //calculations.resultOfCalculations -= double.tryParse(calculations.currentNumber.characters.last)!;
-        //
-        var currentNumber = collectCurrentNumber();
-        if(currentNumber.length  > 2)
-          {
-            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
-            newResult += double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
-            //_calculateResultAfterDeletion();
-            calculations.resultOfCalculations = newResult;
-            // then remove the digit from currentNumber
-            // add it to new result
-            // and update resultOfCalculations
-          }
-        else if(currentNumber.length == 2)
-          {
-            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
-            newResult += double.tryParse(currentNumber[0])!;
-
-            calculations.resultOfCalculations = newResult;
-          }
-        else if(currentNumber.length == 1)
-          {
-            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
-            calculations.resultOfCalculations = newResult;
-          }
-        //_calculateResultAfterDeletion();
+        _calculateResultAfterDeletion();
         _deleteLastDigitFromCurrentNumber();
+      } else if (_isActionAnOperator(displayedActions[index]) &&
+          deletedDigits.isNotEmpty) {
+        deletedDigits = "";
       }
-      else if(_isActionAnOperator(displayedActions[index]) && deletedDigits.isNotEmpty)
-        {
-          deletedDigits = "";
-        }
       if (index == 0) {
         displayedActions = "";
       } else {
@@ -265,29 +228,57 @@ String previousNumber = "";
       _deleteLastAction();
       notifyListeners();
     }
-    // Subtract parsed formerResult from the sum?
   }
 
-// Get the currentNumber (keep collecting digits until the next operator or until displayedActions is empty
-  // currentResult - currentNumber = value of all other numbers
-  // removeTheDigit from currentNumber
-  // add currentNumber to currentResult
-
-
-  void _calculateResultAfterDeletion()
-  {
+  void _calculateResultAfterDeletion() {
     switch (_getLastOperator()) {
       case "+":
+        var currentNumber = collectCurrentNumber();
+        if (currentNumber.length > 2) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          newResult += double.tryParse(
+              currentNumber.substring(0, currentNumber.length - 1))!;
+          //_calculateResultAfterDeletion();
+          calculations.resultOfCalculations = newResult;
+          // then remove the digit from currentNumber
+          // add it to new result
+          // and update resultOfCalculations
+        } else if (currentNumber.length == 2) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          newResult += double.tryParse(currentNumber[0])!;
 
-        SubtractionProcessor processor = SubtractionProcessor(deletedDigits,
-            calculations.resultOfCalculations, calculations.formerResult);
-        var newCalculations = processor.process();
-        calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-        calculations.formerResult = newCalculations.formerResult;
-        calculations.currentNumber = "";
+          calculations.resultOfCalculations = newResult;
+        } else if (currentNumber.length == 1) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          calculations.resultOfCalculations = newResult;
+        }
         break;
       case "-":
-        _calculateTheDifference();
+        var currentNumber = collectCurrentNumber();
+        if (currentNumber.length > 2) {
+          var newResult = calculations.resultOfCalculations +
+              double.tryParse(currentNumber)!;
+          newResult -= double.tryParse(
+              currentNumber.substring(0, currentNumber.length - 1))!;
+          //_calculateResultAfterDeletion();
+          calculations.resultOfCalculations = newResult;
+          // then remove the digit from currentNumber
+          // add it to new result
+          // and update resultOfCalculations
+        } else if (currentNumber.length == 2) {
+          var newResult = calculations.resultOfCalculations +
+              double.tryParse(currentNumber)!;
+          newResult -= double.tryParse(currentNumber[0])!;
+
+          calculations.resultOfCalculations = newResult;
+        } else if (currentNumber.length == 1) {
+          var newResult = calculations.resultOfCalculations +
+              double.tryParse(currentNumber)!;
+          calculations.resultOfCalculations = newResult;
+        }
         break;
       case "x":
         _calculateTheProduct();
@@ -300,20 +291,19 @@ String previousNumber = "";
         break;
     }
   }
-  String collectCurrentNumber()
-  {
+
+  String collectCurrentNumber() {
     String currentNumber = "";
     for (var i = displayedActions.length - 1; i >= 0; i--) {
       if (_isActionAnOperator(displayedActions[i])) {
         break;
-      }
-      else if(_isActionADigit(displayedActions[i]))
-      {
+      } else if (_isActionADigit(displayedActions[i])) {
         currentNumber += displayedActions[i];
       }
     }
     return String.fromCharCodes(currentNumber.runes.toList().reversed);
   }
+
 // Store all full numbers in a list, and then after deleting an operator delete the corresponding number that was created by the operator?
   bool _isActionADigit(String action) {
     return action == '1' ||
@@ -329,11 +319,11 @@ String previousNumber = "";
   }
 
   void _deleteLastDigitFromCurrentNumber() {
-    if(calculations.currentNumber.isNotEmpty)
-      {
-        int index = calculations.currentNumber.length - 1;
-        calculations.currentNumber = calculations.currentNumber.substring(0, index);
-      }
+    if (calculations.currentNumber.isNotEmpty) {
+      int index = calculations.currentNumber.length - 1;
+      calculations.currentNumber =
+          calculations.currentNumber.substring(0, index);
+    }
   }
 
   // if the last character is a digit, delete it also from the currentNumber
