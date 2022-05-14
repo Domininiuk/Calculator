@@ -5,6 +5,7 @@ import 'package:calculator/models/calculations.dart';
 import 'package:calculator/models/processors/addition_processor.dart';
 import 'package:calculator/models/processors/division_processor.dart';
 import 'package:calculator/models/processors/multiplication_processor.dart';
+import 'package:calculator/models/processors/processor.dart';
 import 'package:calculator/models/processors/subtraction_processor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,23 +44,7 @@ class CalculatorModel extends ChangeNotifier {
 //    TODO
 // I could create a factory to replace the switch statement? Page 70 of clean code
     if (calculations.currentNumber.isNotEmpty) {
-      switch (_getLastOperator()) {
-        case "+":
-          _calculateTheSum();
-          break;
-        case "-":
-          _calculateTheDifference();
-          break;
-        case "x":
-          _calculateTheProduct();
-          break;
-        case "÷":
-          _calculateTheQuotient();
-          break;
-        default:
-          _calculateTheSum();
-          break;
-      }
+       calculations = Processor(_getLastOperator(), calculations).process();
 
       notifyListeners();
     }

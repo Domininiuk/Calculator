@@ -1,6 +1,8 @@
+import 'package:calculator/models/processors/processor.dart';
+
 import '../calculations.dart';
 
-class SubtractionProcessor {
+class SubtractionProcessor implements Processor{
   SubtractionProcessor(this._calculations);
   final CalculationsModel _calculations;
 

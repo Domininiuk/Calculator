@@ -96,7 +96,7 @@ class _Calculator extends StatelessWidget {
             OperandButton("1"),
             OperandButton("2"),
             OperandButton("3"),
-            OperatorButton('÷'),
+            OperatorButton("÷"),
           ],
         ),
       ),
