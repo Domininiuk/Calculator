@@ -1,20 +1,10 @@
 import 'package:calculator/models/calculations.dart';
 
-
-// Doesnt work becauuse CalculatorModel has no way to access formerResult
 class MultiplicationProcessor {
-  /*
-   Maybe create a seperate processor class for multiplication, division, and others?
-   Make them extends an abstract class to avoid duplicating the exact same code
-    */
-MultiplicationProcessor(String currentNumber, double resultOfCalculations,
-    double formerResult){
-  _calculations = CalculationsModel(currentNumber, resultOfCalculations, formerResult);
-}
-  late CalculationsModel _calculations;
+  MultiplicationProcessor(this._calculations);
+  final CalculationsModel _calculations;
 
-  //Process is bad because it doesnt imply that a value will be reutnred
-CalculationsModel process() {
+  CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();
     } else if (_isCurrentNumberDoubleDigit()) {
@@ -24,9 +14,6 @@ CalculationsModel process() {
     }
     return _calculations;
   }
-
-  // They are initialized though. Maybe _update?
-
 
   bool _isCurrentNumberTripleDigitOrLonger() {
     return _calculations.isCurrentNumberTripleDigitOrLonger();
@@ -57,8 +44,9 @@ CalculationsModel process() {
   }
 
   void _reverseCalculationOfAllPreviousDigits() {
-    _calculations.resultOfCalculations /= double.tryParse(
-        _calculations.currentNumber.substring(0, _calculations.currentNumber.length - 1))!;
+    _calculations.resultOfCalculations /= double.tryParse(_calculations
+        .currentNumber
+        .substring(0, _calculations.currentNumber.length - 1))!;
   }
 
   bool _isCurrentNumberSmallerThanOne() {
@@ -75,7 +63,8 @@ CalculationsModel process() {
   }
 
   void reverseCalculationOfFirstDigit() {
-    _calculations.resultOfCalculations /= double.tryParse(_calculations.currentNumber[0])!;
+    _calculations.resultOfCalculations /=
+        double.tryParse(_calculations.currentNumber[0])!;
   }
 
   void _doNothing() {}
@@ -93,7 +82,6 @@ CalculationsModel process() {
       _updateFormerResult();
     }
     multiplyResultOfCalculations();
-
   }
 
   bool _isCurrentNumberZero() {
@@ -105,6 +93,7 @@ CalculationsModel process() {
   }
 
   void multiplyResultOfCalculations() {
-    _calculations.resultOfCalculations *= double.tryParse(_calculations.currentNumber)!;
+    _calculations.resultOfCalculations *=
+        double.tryParse(_calculations.currentNumber)!;
   }
 }

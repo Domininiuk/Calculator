@@ -10,16 +10,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorModel extends ChangeNotifier {
-  //
 
-  // You get sum by calcualting doing (current result - previous result = the difference)
+
   CalculationsModel calculations = CalculationsModel.createEmptyModel();
+  // I could create an Actions class?
   bool isSameNumber = false;
   final List<String> actions = [];
   String deletedDigits = "";
   String previousNumber = "";
   String displayedActions = "";
-  //String lastOperator = "";
   bool hasEqualButtonBeenPressed = false;
 
   void addOperand(String operand) {
@@ -41,6 +40,8 @@ class CalculatorModel extends ChangeNotifier {
       }
     }
 
+//    TODO
+// I could create a factory to replace the switch statement? Page 70 of clean code
     if (calculations.currentNumber.isNotEmpty) {
       switch (_getLastOperator()) {
         case "+":
@@ -146,44 +147,26 @@ class CalculatorModel extends ChangeNotifier {
   }
 
   void _calculateTheSum() {
-    AdditionProcessor processor = AdditionProcessor(calculations.currentNumber,
-        calculations.resultOfCalculations, calculations.formerResult);
-    var newCalculations = processor.process();
-    calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-    calculations.formerResult = newCalculations.formerResult;
-    calculations.currentNumber = newCalculations.currentNumber;
+    AdditionProcessor processor = AdditionProcessor(calculations);
+    calculations = processor.process();
+
   }
 
+
   void _calculateTheDifference() {
-    SubtractionProcessor processor = SubtractionProcessor(
-        calculations.currentNumber,
-        calculations.resultOfCalculations,
-        calculations.formerResult);
-    var newCalculations = processor.process();
-    calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-    calculations.formerResult = newCalculations.formerResult;
-    calculations.currentNumber = newCalculations.currentNumber;
+    SubtractionProcessor processor = SubtractionProcessor(calculations);
+    calculations = processor.process();
   }
 
   void _calculateTheProduct() {
-    MultiplicationProcessor processor = MultiplicationProcessor(
-        calculations.currentNumber,
-        calculations.resultOfCalculations,
-        calculations.formerResult);
-    var newCalculations = processor.process();
-    calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-    calculations.formerResult = newCalculations.formerResult;
-    calculations.currentNumber = newCalculations.currentNumber;
+    MultiplicationProcessor processor = MultiplicationProcessor(calculations);
+    calculations = processor.process();
   }
 
   //CANNOT DIVIDE BY 0
   void _calculateTheQuotient() {
-    DivisionProcessor processor = DivisionProcessor(calculations.currentNumber,
-        calculations.resultOfCalculations, calculations.formerResult);
-    var newCalculations = processor.process();
-    calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-    calculations.formerResult = newCalculations.formerResult;
-    calculations.currentNumber = newCalculations.currentNumber;
+    DivisionProcessor processor = DivisionProcessor(calculations);
+    calculations = processor.process();
   }
 
   String _getLastOperator() {
@@ -229,6 +212,8 @@ class CalculatorModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+//TODO
+// I could create a factory to replace the switch statement? Page 70 of clean code
 
   void _calculateResultAfterDeletion() {
     switch (_getLastOperator()) {

@@ -1,18 +1,9 @@
 import '../calculations.dart';
 
-class DivisionProcessor
-{
-  /*
-   Maybe create a seperate processor class for multiplication, division, and others?
-   Make them extends an abstract class to avoid duplicating the exact same code
-    */
-  DivisionProcessor(String currentNumber, double resultOfCalculations,
-      double formerResult){
-    _calculations = CalculationsModel(currentNumber, resultOfCalculations, formerResult);
-  }
-  late CalculationsModel _calculations;
+class DivisionProcessor {
+  DivisionProcessor(this._calculations);
+  final CalculationsModel _calculations;
 
-  //Process is bad because it doesnt imply that a value will be reutnred
   CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();
@@ -23,9 +14,6 @@ class DivisionProcessor
     }
     return _calculations;
   }
-
-  // They are initialized though. Maybe _update?
-
 
   bool _isCurrentNumberTripleDigitOrLonger() {
     return _calculations.isCurrentNumberTripleDigitOrLonger();
@@ -56,8 +44,9 @@ class DivisionProcessor
   }
 
   void _reverseCalculationOfAllPreviousDigits() {
-    _calculations.resultOfCalculations *= double.tryParse(
-        _calculations.currentNumber.substring(0, _calculations.currentNumber.length - 1))!;
+    _calculations.resultOfCalculations *= double.tryParse(_calculations
+        .currentNumber
+        .substring(0, _calculations.currentNumber.length - 1))!;
   }
 
   bool _isCurrentNumberSmallerThanOne() {
@@ -74,7 +63,8 @@ class DivisionProcessor
   }
 
   void reverseCalculationOfFirstDigit() {
-    _calculations.resultOfCalculations *= double.tryParse(_calculations.currentNumber[0])!;
+    _calculations.resultOfCalculations *=
+        double.tryParse(_calculations.currentNumber[0])!;
   }
 
   void _doNothing() {}
@@ -92,7 +82,6 @@ class DivisionProcessor
       _updateFormerResult();
     }
     divideResultOfCalculations();
-
   }
 
   bool _isCurrentNumberZero() {
@@ -104,6 +93,7 @@ class DivisionProcessor
   }
 
   void divideResultOfCalculations() {
-    _calculations.resultOfCalculations /= double.tryParse(_calculations.currentNumber)!;
+    _calculations.resultOfCalculations /=
+        double.tryParse(_calculations.currentNumber)!;
   }
 }
