@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/models/calculator_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import '../common/theme.dart';
+import 'operand_button.dart';
+import 'operator_button.dart';
 
 class CalculatorWidget extends StatelessWidget {
   const CalculatorWidget({Key? key}) : super(key: key);
@@ -18,74 +19,6 @@ class CalculatorWidget extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,
         )),
         body: _Calculator());
-  }
-}
-
-class _OperandButton extends StatefulWidget {
-  const _OperandButton(this.operand);
-
-  final String operand;
-  @override
-  _OperandButtonState createState() => _OperandButtonState();
-}
-
-class _OperandButtonState extends State<_OperandButton>
-    with SingleTickerProviderStateMixin {
-  late double _scale;
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 100),
-        lowerBound: 0.0,
-        upperBound: 0.1)
-      ..addListener(() {
-        setState(() {});
-      });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _scale = 1 - _controller.value;
-    return _animatedButton();
-  }
-
-  Widget _animatedButton() {
-    return Transform.scale(
-      scale: _scale,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: SizedBox(
-          height: 90.0,
-          width: 90.0,
-          child: OutlinedButton(
-              style: operandButtonTheme,
-              child:  Text(
-                widget.operand,
-                textScaleFactor: 2.0,
-              ),
-              onPressed: () {
-                onOperandPressed(context, widget.operand);
-              }),
-        ),
-      ),
-    );
-  }
-
-  void onOperandPressed(BuildContext context, String digit) {
-    var calculations = context.read<CalculatorModel>();
-    calculations.addOperand(digit);
-
-    _controller.forward().whenComplete(() => _controller.reverse());
   }
 }
 
@@ -159,124 +92,44 @@ class _Calculator extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.only(left: 2.0),
         child: Row(
-          children: <Widget>[
-            _OperandButton("1"),
-            _OperandButton("2"),
-            _OperandButton("3"),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 90.0,
-                width: 90.0,
-                child: OutlinedButton(
-                  style: operatorButtonTheme,
-                  child: const Text(
-                    '÷',
-                    textScaleFactor: 2.0,
-                  ),
-                  onPressed: () {
-                    onOperatorPressed(context, '÷');
-                  },
-                ),
-              ),
-            ),
+          children: const <Widget>[
+            OperandButton("1"),
+            OperandButton("2"),
+            OperandButton("3"),
+            OperatorButton('÷'),
           ],
         ),
       ),
       Padding(
         padding: const EdgeInsets.only(left: 2.0),
         child: Row(
-          children: <Widget>[
-            _OperandButton("4"),
-            _OperandButton("5"),
-            _OperandButton("6"),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 90.0,
-                width: 90.0,
-                child: OutlinedButton(
-                  style: operatorButtonTheme,
-                  child: const Text(
-                    'x',
-                    textScaleFactor: 2.0,
-                  ),
-                  onPressed: () {
-                    onOperatorPressed(context, 'x');
-                  },
-                ),
-              ),
-            ),
+          children: const <Widget>[
+            OperandButton("4"),
+            OperandButton("5"),
+            OperandButton("6"),
+            OperatorButton("x")
           ],
         ),
       ),
       Padding(
         padding: const EdgeInsets.only(left: 2.0),
         child: Row(
-          children: <Widget>[
-            _OperandButton("7"),
-            _OperandButton("8"),
-            _OperandButton("9"),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 90.0,
-                width: 90.0,
-                child: OutlinedButton(
-                  style: operatorButtonTheme,
-                  child: const Text(
-                    '-',
-                    textScaleFactor: 2.0,
-                  ),
-                  onPressed: () {
-                    onOperatorPressed(context, '-');
-                  },
-                ),
-              ),
-            ),
+          children: const <Widget>[
+            OperandButton("7"),
+            OperandButton("8"),
+            OperandButton("9"),
+            OperatorButton("-")
           ],
         ),
       ),
       Padding(
         padding: const EdgeInsets.only(left: 2.0),
         child: Row(
-          children: <Widget>[
-            _OperandButton("."),
-            _OperandButton("0"),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 90.0,
-                width: 90.0,
-                child: OutlinedButton(
-                  style: operatorButtonTheme,
-                  child: const Text(
-                    '=',
-                    textScaleFactor: 2.0,
-                  ),
-                  onPressed: () {
-                    onOperatorPressed(context, '=');
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: SizedBox(
-                height: 90.0,
-                width: 90.0,
-                child: OutlinedButton(
-                  style: operatorButtonTheme,
-                  child: const Text(
-                    '+',
-                    textScaleFactor: 2.0,
-                  ),
-                  onPressed: () {
-                    onOperatorPressed(context, '+');
-                  },
-                ),
-              ),
-            ),
+          children: const <Widget>[
+            OperandButton("."),
+            OperandButton("0"),
+            OperatorButton("="),
+            OperatorButton("+"),
           ],
         ),
       ),
