@@ -157,7 +157,7 @@ class CalculatorModel extends ChangeNotifier {
       int index = displayedActions.length - 1;
 
       if (_isActionADigit(displayedActions[index]) &&
-          (calculations.currentNumber.isNotEmpty || deletedDigits.isNotEmpty)) {
+          (calculations.currentNumber.isNotEmpty || deletedDigits.isNotEmpty || displayedActions.length == 1)) {
         _calculateResultAfterDeletion();
         _deleteLastDigitFromCurrentNumber();
       } else if (_isActionAnOperator(displayedActions[index]) &&
@@ -228,10 +228,70 @@ class CalculatorModel extends ChangeNotifier {
         }
         break;
       case "x":
+        var currentNumber = collectCurrentNumber();
+        if (currentNumber.length > 2) {
+          var newResult = calculations.resultOfCalculations /
+              double.tryParse(currentNumber)!;
+          newResult *= double.tryParse(
+              currentNumber.substring(0, currentNumber.length - 1))!;
+          calculations.resultOfCalculations = newResult;
+
+        } else if (currentNumber.length == 2) {
+          var newResult = calculations.resultOfCalculations /
+              double.tryParse(currentNumber)!;
+          newResult *= double.tryParse(currentNumber[0])!;
+
+          calculations.resultOfCalculations = newResult;
+        } else if (currentNumber.length == 1) {
+          var newResult = calculations.resultOfCalculations /
+              double.tryParse(currentNumber)!;
+          calculations.resultOfCalculations = newResult;
+        }
         break;
       case "÷":
+        var currentNumber = collectCurrentNumber();
+        if (currentNumber.length > 2) {
+          var newResult = calculations.resultOfCalculations *
+              double.tryParse(currentNumber)!;
+          newResult /= double.tryParse(
+              currentNumber.substring(0, currentNumber.length - 1))!;
+          calculations.resultOfCalculations = newResult;
+
+        } else if (currentNumber.length == 2) {
+          var newResult = calculations.resultOfCalculations *
+              double.tryParse(currentNumber)!;
+          newResult /= double.tryParse(currentNumber[0])!;
+
+          calculations.resultOfCalculations = newResult;
+        } else if (currentNumber.length == 1) {
+          var newResult = calculations.resultOfCalculations /
+              double.tryParse(currentNumber)!;
+          calculations.resultOfCalculations = newResult;
+        }
         break;
       default:
+        var currentNumber = collectCurrentNumber();
+        if (currentNumber.length > 2) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          newResult += double.tryParse(
+              currentNumber.substring(0, currentNumber.length - 1))!;
+          //_calculateResultAfterDeletion();
+          calculations.resultOfCalculations = newResult;
+          // then remove the digit from currentNumber
+          // add it to new result
+          // and update resultOfCalculations
+        } else if (currentNumber.length == 2) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          newResult += double.tryParse(currentNumber[0])!;
+
+          calculations.resultOfCalculations = newResult;
+        } else if (currentNumber.length == 1) {
+          var newResult = calculations.resultOfCalculations -
+              double.tryParse(currentNumber)!;
+          calculations.resultOfCalculations = newResult;
+        }
         break;
     }
   }
