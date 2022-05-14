@@ -6,9 +6,9 @@ import 'package:calculator/models/processors/multiplication_processor.dart';
 import 'package:calculator/models/processors/subtraction_processor.dart';
 
 
-abstract class Processor
+abstract class CalculationProcessor
 {
-  factory Processor(String type, CalculationsModel calculations)
+  factory CalculationProcessor(String type, CalculationsModel calculations)
   {
     switch (type){
       case addition: return AdditionProcessor(calculations);

@@ -5,7 +5,7 @@ import 'package:calculator/models/calculations.dart';
 import 'package:calculator/models/processors/addition_processor.dart';
 import 'package:calculator/models/processors/division_processor.dart';
 import 'package:calculator/models/processors/multiplication_processor.dart';
-import 'package:calculator/models/processors/processor.dart';
+import 'package:calculator/models/processors/calculation_processor.dart';
 import 'package:calculator/models/processors/subtraction_processor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -41,10 +41,9 @@ class CalculatorModel extends ChangeNotifier {
       }
     }
 
-//    TODO
-// I could create a factory to replace the switch statement? Page 70 of clean code
+
     if (calculations.currentNumber.isNotEmpty) {
-       calculations = Processor(_getLastOperator(), calculations).process();
+       calculations = CalculationProcessor(_getLastOperator(), calculations).process();
 
       notifyListeners();
     }
@@ -131,29 +130,7 @@ class CalculatorModel extends ChangeNotifier {
     return false;
   }
 
-  void _calculateTheSum() {
-    AdditionProcessor processor = AdditionProcessor(calculations);
-    calculations = processor.process();
-
-  }
-
-
-  void _calculateTheDifference() {
-    SubtractionProcessor processor = SubtractionProcessor(calculations);
-    calculations = processor.process();
-  }
-
-  void _calculateTheProduct() {
-    MultiplicationProcessor processor = MultiplicationProcessor(calculations);
-    calculations = processor.process();
-  }
-
-  //CANNOT DIVIDE BY 0
-  void _calculateTheQuotient() {
-    DivisionProcessor processor = DivisionProcessor(calculations);
-    calculations = processor.process();
-  }
-
+  
   String _getLastOperator() {
     for (var i = actions.length - 1; i >= 0; i--) {
       if (_isActionAnOperator(actions[i])) {
@@ -251,13 +228,10 @@ class CalculatorModel extends ChangeNotifier {
         }
         break;
       case "x":
-        _calculateTheProduct();
         break;
       case "÷":
-        _calculateTheQuotient();
         break;
       default:
-        _calculateTheSum();
         break;
     }
   }
@@ -274,7 +248,8 @@ class CalculatorModel extends ChangeNotifier {
     return String.fromCharCodes(currentNumber.runes.toList().reversed);
   }
 
-// Store all full numbers in a list, and then after deleting an operator delete the corresponding number that was created by the operator?
+//TODO
+// Could also create a factory for here lol
   bool _isActionADigit(String action) {
     return action == '1' ||
         action == '2' ||

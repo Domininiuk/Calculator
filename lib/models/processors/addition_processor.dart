@@ -1,8 +1,8 @@
-import 'package:calculator/models/processors/processor.dart';
+import 'package:calculator/models/processors/calculation_processor.dart';
 
 import '../calculations.dart';
 
-class AdditionProcessor implements Processor{
+class AdditionProcessor implements CalculationProcessor{
   AdditionProcessor(this._calculations);
   final CalculationsModel _calculations;
 
