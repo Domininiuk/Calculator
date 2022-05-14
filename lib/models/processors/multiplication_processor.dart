@@ -1,18 +1,18 @@
+import 'package:calculator/models/calculations.dart';
+
 class MultiplicationProcessor {
   /*
    Maybe create a seperate processor class for multiplication, division, and others?
    Make them extends an abstract class to avoid duplicating the exact same code
     */
-
-  String _currentNumber = "";
-  double _resultOfCalculations = 0.0;
-  double _formerResult = 0.0;
+MultiplicationProcessor(String currentNumber, double resultOfCalculations,
+    double formerResult){
+  _calculations = CalculationsModel(currentNumber, resultOfCalculations, formerResult);
+}
+  late CalculationsModel _calculations;
 
   //Process is bad because it doesnt imply that a value will be reutnred
-  double process(
-      String currentNumber, double resultOfCalculations, double formerResult) {
-    _initializeVariables(currentNumber, resultOfCalculations, formerResult);
-
+  double process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();
     } else if (_isCurrentNumberDoubleDigit()) {
@@ -20,31 +20,14 @@ class MultiplicationProcessor {
     } else if (_isCurrentNumberSingleDigit()) {
       _processSingleDigitNumber();
     }
-    return _resultOfCalculations;
+    return _calculations.resultOfCalculations;
   }
 
   // They are initialized though. Maybe _update?
-  void _initializeVariables(
-      String currentNumber, double resultOfCalculations, double formerResult) {
-    _initializeCurrentNumber(currentNumber);
-    _initializeResultOfCalculations(resultOfCalculations);
-    _initializeFormerResult(formerResult);
-  }
 
-  void _initializeCurrentNumber(String currentNumber) {
-    _currentNumber = currentNumber;
-  }
-
-  void _initializeResultOfCalculations(double resultOfCalculations) {
-    _resultOfCalculations = resultOfCalculations;
-  }
-
-  void _initializeFormerResult(double formerResult) {
-    _formerResult = formerResult;
-  }
 
   bool _isCurrentNumberTripleDigitOrLonger() {
-    return _currentNumber.length >= 3;
+    return _calculations.isCurrentNumberTripleDigitOrLonger();
   }
 
   void _processTripleDigitOrLongerNumber() {
@@ -60,25 +43,24 @@ class MultiplicationProcessor {
   }
 
   bool _isCurrentNumberAllZeroes() {
-    return !_currentNumber.contains(RegExp(r'[1-9]')) &&
-        _currentNumber.contains("0");
+    return _calculations.isCurrentNumberAllZeroes();
   }
 
   void _updateResultOfCalculations() {
-    _resultOfCalculations = _formerResult;
+    _calculations.updateResultOfCalculations();
   }
 
   bool _isCurrentNumberDoubleDigit() {
-    return _currentNumber.length == 2;
+    return _calculations.isCurrentNumberDoubleDigit();
   }
 
   void _reverseCalculationOfAllPreviousDigits() {
-    _resultOfCalculations /= double.tryParse(
-        _currentNumber.substring(0, _currentNumber.length - 1))!;
+    _calculations.resultOfCalculations /= double.tryParse(
+        _calculations.currentNumber.substring(0, _calculations.currentNumber.length - 1))!;
   }
 
   bool _isCurrentNumberSmallerThanOne() {
-    return _currentNumber.substring(0, 2) == "0.";
+    return _calculations.isCurrentNumberSmallerThanOne();
   }
 
   void _processDoubleDigitNumber() {
@@ -92,34 +74,36 @@ class MultiplicationProcessor {
   }
 
   void reverseCalculationOfFirstDigit() {
-    _resultOfCalculations /= double.tryParse(_currentNumber[0])!;
+    _calculations.resultOfCalculations /= double.tryParse(_calculations.currentNumber[0])!;
   }
 
   void _doNothing() {}
 
   bool _isFirstDigitZero() {
-    return _currentNumber[0] == "0";
+    return _calculations.isFirstDigitZero();
   }
 
   bool _isCurrentNumberSingleDigit() {
-    return _currentNumber.length == 1;
+    return _calculations.isCurrentNumberSingleDigit();
   }
 
   void _processSingleDigitNumber() {
     if (_isCurrentNumberZero()) {
       _updateFormerResult();
     }
+    multiplyResultOfCalculations();
+
   }
 
   bool _isCurrentNumberZero() {
-    return _currentNumber == "0";
+    return _calculations.isCurrentNumberZero();
   }
 
   void _updateFormerResult() {
-    _formerResult = _resultOfCalculations;
+    _calculations.updateFormerResult();
   }
 
   void multiplyResultOfCalculations() {
-    _resultOfCalculations *= double.tryParse(_currentNumber)!;
+    _calculations.resultOfCalculations *= double.tryParse(_calculations.currentNumber)!;
   }
 }

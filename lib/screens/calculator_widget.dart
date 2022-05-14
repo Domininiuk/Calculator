@@ -1,13 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:calculator/models/calculations.dart';
+import 'package:calculator/models/calculator_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import '../common/theme.dart';
 
-class Calculator extends StatelessWidget {
-  const Calculator({Key? key}) : super(key: key);
+class CalculatorWidget extends StatelessWidget {
+  const CalculatorWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +27,12 @@ class _Calculator extends StatelessWidget {
     return Column(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
       Row(
         children: [
-          Consumer<CalculationsModel>(builder: (context, calculations, child) {
+          Consumer<CalculatorModel>(builder: (context, calculations, child) {
             return Expanded(
               child: Visibility(
                 visible: true,
                 child: AutoSizeText(
-                  context.read<CalculationsModel>().resultOfCalculations.toString(),
+                  context.read<CalculatorModel>().resultOfCalculations.toString(),
                   textScaleFactor: 3.3,
                   maxLines: 3,
                   minFontSize: 2.0,
@@ -48,11 +48,11 @@ class _Calculator extends StatelessWidget {
           child: Divider(
             color: Colors.black,
           )),
-      Consumer<CalculationsModel>(
+      Consumer<CalculatorModel>(
           builder: (context, calculations, child) {
             return Expanded(
                 child: AutoSizeText(
-                  context.read<CalculationsModel>().displayedActions.toString(),
+                  context.read<CalculatorModel>().displayedActions.toString(),
                   textScaleFactor: 3.0,
                   maxLines: 5,
                   minFontSize: 2.0,
@@ -391,17 +391,17 @@ class _Calculator extends StatelessWidget {
   }
 
   void onOperandPressed(BuildContext context, String digit) {
-    var calculations = context.read<CalculationsModel>();
+    var calculations = context.read<CalculatorModel>();
     calculations.addOperand(digit);
   }
 
   void onOperatorPressed(BuildContext context, String operator) {
-    var calculations = context.read<CalculationsModel>();
+    var calculations = context.read<CalculatorModel>();
     calculations.addOperator(operator);
   }
 
   void onDeletePressed(BuildContext context) {
-    var calculations = context.read<CalculationsModel>();
+    var calculations = context.read<CalculatorModel>();
     calculations.deleteLast();
   }
 }

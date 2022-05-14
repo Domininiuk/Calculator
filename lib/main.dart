@@ -1,5 +1,5 @@
-import 'package:calculator/models/calculations.dart';
-import 'package:calculator/screens/calculator.dart';
+import 'package:calculator/models/calculator_model.dart';
+import 'package:calculator/screens/calculator_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,14 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CalculationsModel())
+        ChangeNotifierProvider(create: (context) => CalculatorModel())
       ],
       child: MaterialApp(
         title: 'Calculator',
         theme: appTheme,
         initialRoute: '/',
         routes: {
-          '/' : (context) => const Calculator()
+          '/' : (context) => const CalculatorWidget()
         },
       ),
     );
