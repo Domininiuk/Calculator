@@ -1,20 +1,15 @@
-import 'package:calculator/models/calculations.dart';
+import '../calculations.dart';
 
+class AdditionProcessor{
 
-// Doesnt work becauuse CalculatorModel has no way to access formerResult
-class MultiplicationProcessor {
-  /*
-   Maybe create a seperate processor class for multiplication, division, and others?
-   Make them extends an abstract class to avoid duplicating the exact same code
-    */
-MultiplicationProcessor(String currentNumber, double resultOfCalculations,
-    double formerResult){
-  _calculations = CalculationsModel(currentNumber, resultOfCalculations, formerResult);
-}
+  AdditionProcessor(String currentNumber, double resultOfCalculations,
+      double formerResult){
+    _calculations = CalculationsModel(currentNumber, resultOfCalculations, formerResult);
+  }
   late CalculationsModel _calculations;
 
   //Process is bad because it doesnt imply that a value will be reutnred
-CalculationsModel process() {
+  CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();
     } else if (_isCurrentNumberDoubleDigit()) {
@@ -35,12 +30,12 @@ CalculationsModel process() {
   void _processTripleDigitOrLongerNumber() {
     if (_isCurrentNumberSmallerThanOne() && !_isCurrentNumberAllZeroes()) {
       _updateResultOfCalculations();
-      multiplyResultOfCalculations();
+      subtractResultOfCalculations();
     } else if (_isCurrentNumberAllZeroes()) {
       _doNothing();
     } else {
       _reverseCalculationOfAllPreviousDigits();
-      multiplyResultOfCalculations();
+      subtractResultOfCalculations();
     }
   }
 
@@ -57,7 +52,7 @@ CalculationsModel process() {
   }
 
   void _reverseCalculationOfAllPreviousDigits() {
-    _calculations.resultOfCalculations /= double.tryParse(
+    _calculations.resultOfCalculations -= double.tryParse(
         _calculations.currentNumber.substring(0, _calculations.currentNumber.length - 1))!;
   }
 
@@ -70,12 +65,12 @@ CalculationsModel process() {
       _doNothing();
     } else {
       reverseCalculationOfFirstDigit();
-      multiplyResultOfCalculations();
+      subtractResultOfCalculations();
     }
   }
 
   void reverseCalculationOfFirstDigit() {
-    _calculations.resultOfCalculations /= double.tryParse(_calculations.currentNumber[0])!;
+    _calculations.resultOfCalculations -= double.tryParse(_calculations.currentNumber[0])!;
   }
 
   void _doNothing() {}
@@ -92,7 +87,7 @@ CalculationsModel process() {
     if (_isCurrentNumberZero()) {
       _updateFormerResult();
     }
-    multiplyResultOfCalculations();
+    subtractResultOfCalculations();
 
   }
 
@@ -104,7 +99,7 @@ CalculationsModel process() {
     _calculations.updateFormerResult();
   }
 
-  void multiplyResultOfCalculations() {
-    _calculations.resultOfCalculations *= double.tryParse(_calculations.currentNumber)!;
+  void subtractResultOfCalculations() {
+    _calculations.resultOfCalculations += double.tryParse(_calculations.currentNumber)!;
   }
 }

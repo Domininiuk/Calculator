@@ -2,7 +2,7 @@ class CalculationsModel {
   CalculationsModel(
       this.currentNumber, this.resultOfCalculations, this.formerResult);
 
-  CalculationsModel.fromEmpty();
+  CalculationsModel.createEmptyModel();
   String currentNumber = "";
   double resultOfCalculations = 0.0;
   double formerResult = 0.0;
