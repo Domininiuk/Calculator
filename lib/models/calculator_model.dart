@@ -12,26 +12,23 @@ import 'package:flutter/material.dart';
 class CalculatorModel extends ChangeNotifier {
   //
 
-
-
-  
-  
+  // You get sum by calcualting doing (current result - previous result = the difference)
   CalculationsModel calculations = CalculationsModel.createEmptyModel();
   bool isSameNumber = false;
   final List<String> actions = [];
-  String previousNumber = "";
+String deletedDigits = "";
+String previousNumber = "";
   String displayedActions = "";
-  String deletedActions = "";
+  //String lastOperator = "";
   bool hasEqualButtonBeenPressed = false;
 
   void addOperand(String operand) {
     isSameNumber = true;
-    if(hasEqualButtonBeenPressed)
-      {
-        calculations.resultOfCalculations = 0.0;
-        hasEqualButtonBeenPressed = false;
-        notifyListeners();
-      }
+    if (hasEqualButtonBeenPressed) {
+      calculations.resultOfCalculations = 0.0;
+      hasEqualButtonBeenPressed = false;
+      notifyListeners();
+    }
     if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
     } else {
       if (_isOperandADot(operand) && calculations.currentNumber.contains(".")) {
@@ -62,8 +59,8 @@ class CalculatorModel extends ChangeNotifier {
           _calculateTheSum();
           break;
       }
-      notifyListeners();
 
+      notifyListeners();
     }
   }
 
@@ -91,12 +88,11 @@ class CalculatorModel extends ChangeNotifier {
     }
     return false;
   }
-  //addAction
-
-  // OPERAND OPERATOR OPERAND = RESULT SHOWN THEN OPERAND OPERATOR OPERAND
-
+  
+  
   void addOperator(String operator) {
     isSameNumber = false;
+    
     calculations.formerResult = 0.0;
 
     if (operator == "=") {
@@ -150,9 +146,9 @@ class CalculatorModel extends ChangeNotifier {
     return false;
   }
 
-
   void _calculateTheSum() {
-    AdditionProcessor processor = AdditionProcessor(calculations.currentNumber, calculations.resultOfCalculations, calculations.formerResult);
+    AdditionProcessor processor = AdditionProcessor(calculations.currentNumber,
+        calculations.resultOfCalculations, calculations.formerResult);
     var newCalculations = processor.process();
     calculations.resultOfCalculations = newCalculations.resultOfCalculations;
     calculations.formerResult = newCalculations.formerResult;
@@ -160,35 +156,31 @@ class CalculatorModel extends ChangeNotifier {
   }
 
   void _calculateTheDifference() {
-    SubtractionProcessor processor = SubtractionProcessor(calculations.currentNumber, calculations.resultOfCalculations, calculations.formerResult);
+    SubtractionProcessor processor = SubtractionProcessor(
+        calculations.currentNumber,
+        calculations.resultOfCalculations,
+        calculations.formerResult);
     var newCalculations = processor.process();
     calculations.resultOfCalculations = newCalculations.resultOfCalculations;
     calculations.formerResult = newCalculations.formerResult;
     calculations.currentNumber = newCalculations.currentNumber;
   }
 
-  bool _isCurrentNumAllZeroes()
-  {
-    return !calculations.currentNumber.contains(RegExp(r'[1-9]')) && calculations.currentNumber.contains("0");
-  }
-
-
-//  I think I could extract the logic of the _calculate methods to a different class.
-  // Calculations is already complicated enough, no need to make it even harder
-  // I want the CalculationsModel class to only tell other objects what to do. I do not want it to do any processing of its own
-  // Maybe a Calculator class? But there already is a calculator class. Some variation of "Processor"?
-
   void _calculateTheProduct() {
-    MultiplicationProcessor processor = MultiplicationProcessor(calculations.currentNumber, calculations.resultOfCalculations, calculations.formerResult);
+    MultiplicationProcessor processor = MultiplicationProcessor(
+        calculations.currentNumber,
+        calculations.resultOfCalculations,
+        calculations.formerResult);
     var newCalculations = processor.process();
     calculations.resultOfCalculations = newCalculations.resultOfCalculations;
-    calculations. formerResult = newCalculations.formerResult;
+    calculations.formerResult = newCalculations.formerResult;
     calculations.currentNumber = newCalculations.currentNumber;
   }
 
   //CANNOT DIVIDE BY 0
   void _calculateTheQuotient() {
-    DivisionProcessor processor = DivisionProcessor(calculations.currentNumber, calculations.resultOfCalculations, calculations.formerResult);
+    DivisionProcessor processor = DivisionProcessor(calculations.currentNumber,
+        calculations.resultOfCalculations, calculations.formerResult);
     var newCalculations = processor.process();
     calculations.resultOfCalculations = newCalculations.resultOfCalculations;
     calculations.formerResult = newCalculations.formerResult;
@@ -218,22 +210,111 @@ class CalculatorModel extends ChangeNotifier {
 
   void deleteLast() {
     if (displayedActions.isNotEmpty) {
-      _deleteLastAction();
       int index = displayedActions.length - 1;
 
-      if (_isActionADigit(displayedActions[index]) && calculations.currentNumber.isNotEmpty) {
+
+
+
+
+
+      if (_isActionADigit(displayedActions[index]) &&
+          (calculations.currentNumber.isNotEmpty || deletedDigits.isNotEmpty)) {
+
+        // Only works for single digit numbers
+        // Need to find a way to collect the full number
+        // So basically... this really is like the processor classes just in reverse.
+        // But... I can still use the processor classes for this. just use opposite ones?
+        //calculations.resultOfCalculations -= double.tryParse(calculations.currentNumber.characters.last)!;
+        //
+        var currentNumber = collectCurrentNumber();
+        if(currentNumber.length  > 2)
+          {
+            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
+            newResult += double.tryParse(currentNumber.substring(0, currentNumber.length - 1))!;
+            //_calculateResultAfterDeletion();
+            calculations.resultOfCalculations = newResult;
+            // then remove the digit from currentNumber
+            // add it to new result
+            // and update resultOfCalculations
+          }
+        else if(currentNumber.length == 2)
+          {
+            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
+            newResult += double.tryParse(currentNumber[0])!;
+
+            calculations.resultOfCalculations = newResult;
+          }
+        else if(currentNumber.length == 1)
+          {
+            var newResult = calculations.resultOfCalculations - double.tryParse(currentNumber)!;
+            calculations.resultOfCalculations = newResult;
+          }
+        //_calculateResultAfterDeletion();
         _deleteLastDigitFromCurrentNumber();
       }
+      else if(_isActionAnOperator(displayedActions[index]) && deletedDigits.isNotEmpty)
+        {
+          deletedDigits = "";
+        }
       if (index == 0) {
         displayedActions = "";
       } else {
         displayedActions = displayedActions.substring(0, index);
       }
 
+      _deleteLastAction();
       notifyListeners();
     }
+    // Subtract parsed formerResult from the sum?
   }
 
+// Get the currentNumber (keep collecting digits until the next operator or until displayedActions is empty
+  // currentResult - currentNumber = value of all other numbers
+  // removeTheDigit from currentNumber
+  // add currentNumber to currentResult
+
+
+  void _calculateResultAfterDeletion()
+  {
+    switch (_getLastOperator()) {
+      case "+":
+
+        SubtractionProcessor processor = SubtractionProcessor(deletedDigits,
+            calculations.resultOfCalculations, calculations.formerResult);
+        var newCalculations = processor.process();
+        calculations.resultOfCalculations = newCalculations.resultOfCalculations;
+        calculations.formerResult = newCalculations.formerResult;
+        calculations.currentNumber = "";
+        break;
+      case "-":
+        _calculateTheDifference();
+        break;
+      case "x":
+        _calculateTheProduct();
+        break;
+      case "÷":
+        _calculateTheQuotient();
+        break;
+      default:
+        _calculateTheSum();
+        break;
+    }
+  }
+  String collectCurrentNumber()
+  {
+    String currentNumber = "";
+    for (var i = displayedActions.length - 1; i >= 0; i--) {
+      if (_isActionAnOperator(displayedActions[i])) {
+        break;
+      }
+      else if(_isActionADigit(displayedActions[i]))
+      {
+        currentNumber += displayedActions[i];
+      }
+    }
+    return String.fromCharCodes(currentNumber.runes.toList().reversed);
+  }
+// Store all full numbers in a list, and then after deleting an operator delete the corresponding number that was created by the operator?
   bool _isActionADigit(String action) {
     return action == '1' ||
         action == '2' ||
@@ -248,9 +329,11 @@ class CalculatorModel extends ChangeNotifier {
   }
 
   void _deleteLastDigitFromCurrentNumber() {
-    int index = calculations.currentNumber.length - 1;
-
-    calculations.currentNumber = calculations.currentNumber.substring(0, index);
+    if(calculations.currentNumber.isNotEmpty)
+      {
+        int index = calculations.currentNumber.length - 1;
+        calculations.currentNumber = calculations.currentNumber.substring(0, index);
+      }
   }
 
   // if the last character is a digit, delete it also from the currentNumber
