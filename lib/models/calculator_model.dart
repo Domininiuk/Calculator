@@ -3,6 +3,7 @@ This model object represents a combination of all operands and operators
  */
 import 'package:calculator/models/calculations.dart';
 import 'package:calculator/models/processors/addition_processor.dart';
+import 'package:calculator/models/processors/delete_processors/delete_processor.dart';
 import 'package:calculator/models/processors/division_processor.dart';
 import 'package:calculator/models/processors/multiplication_processor.dart';
 import 'package:calculator/models/processors/calculation_processor.dart';
@@ -11,8 +12,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorModel extends ChangeNotifier {
-
-
   CalculationsModel calculations = CalculationsModel.createEmptyModel();
   // I could create an Actions class?
   bool isSameNumber = false;
@@ -41,9 +40,9 @@ class CalculatorModel extends ChangeNotifier {
       }
     }
 
-
     if (calculations.currentNumber.isNotEmpty) {
-       calculations = CalculationProcessor(_getLastOperator(), calculations).process();
+      calculations =
+          CalculationProcessor(_getLastOperator(), calculations).process();
 
       notifyListeners();
     }
@@ -130,7 +129,6 @@ class CalculatorModel extends ChangeNotifier {
     return false;
   }
 
-  
   String _getLastOperator() {
     for (var i = actions.length - 1; i >= 0; i--) {
       if (_isActionAnOperator(actions[i])) {
@@ -157,7 +155,9 @@ class CalculatorModel extends ChangeNotifier {
       int index = displayedActions.length - 1;
 
       if (_isActionADigit(displayedActions[index]) &&
-          (calculations.currentNumber.isNotEmpty || deletedDigits.isNotEmpty || displayedActions.length == 1)) {
+          (calculations.currentNumber.isNotEmpty ||
+              deletedDigits.isNotEmpty ||
+              displayedActions.isNotEmpty)) {
         _calculateResultAfterDeletion();
         _deleteLastDigitFromCurrentNumber();
       } else if (_isActionAnOperator(displayedActions[index]) &&
@@ -178,130 +178,18 @@ class CalculatorModel extends ChangeNotifier {
 // I could create a factory to replace the switch statement? Page 70 of clean code
 
   void _calculateResultAfterDeletion() {
-    switch (_getLastOperator()) {
-      case "+":
-        var currentNumber = collectCurrentNumber();
-        if (currentNumber.length > 2) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          newResult += double.tryParse(
-              currentNumber.substring(0, currentNumber.length - 1))!;
-          //_calculateResultAfterDeletion();
-          calculations.resultOfCalculations = newResult;
-          // then remove the digit from currentNumber
-          // add it to new result
-          // and update resultOfCalculations
-        } else if (currentNumber.length == 2) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          newResult += double.tryParse(currentNumber[0])!;
-
-          calculations.resultOfCalculations = newResult;
-        } else if (currentNumber.length == 1) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          calculations.resultOfCalculations = newResult;
-        }
-        break;
-      case "-":
-        var currentNumber = collectCurrentNumber();
-        if (currentNumber.length > 2) {
-          var newResult = calculations.resultOfCalculations +
-              double.tryParse(currentNumber)!;
-          newResult -= double.tryParse(
-              currentNumber.substring(0, currentNumber.length - 1))!;
-          //_calculateResultAfterDeletion();
-          calculations.resultOfCalculations = newResult;
-          // then remove the digit from currentNumber
-          // add it to new result
-          // and update resultOfCalculations
-        } else if (currentNumber.length == 2) {
-          var newResult = calculations.resultOfCalculations +
-              double.tryParse(currentNumber)!;
-          newResult -= double.tryParse(currentNumber[0])!;
-
-          calculations.resultOfCalculations = newResult;
-        } else if (currentNumber.length == 1) {
-          var newResult = calculations.resultOfCalculations +
-              double.tryParse(currentNumber)!;
-          calculations.resultOfCalculations = newResult;
-        }
-        break;
-      case "x":
-        var currentNumber = collectCurrentNumber();
-        if (currentNumber.length > 2) {
-          var newResult = calculations.resultOfCalculations /
-              double.tryParse(currentNumber)!;
-          newResult *= double.tryParse(
-              currentNumber.substring(0, currentNumber.length - 1))!;
-          calculations.resultOfCalculations = newResult;
-
-        } else if (currentNumber.length == 2) {
-          var newResult = calculations.resultOfCalculations /
-              double.tryParse(currentNumber)!;
-          newResult *= double.tryParse(currentNumber[0])!;
-
-          calculations.resultOfCalculations = newResult;
-        } else if (currentNumber.length == 1) {
-          var newResult = calculations.resultOfCalculations /
-              double.tryParse(currentNumber)!;
-          calculations.resultOfCalculations = newResult;
-        }
-        break;
-      case "÷":
-        var currentNumber = collectCurrentNumber();
-        if (currentNumber.length > 2) {
-          var newResult = calculations.resultOfCalculations *
-              double.tryParse(currentNumber)!;
-          newResult /= double.tryParse(
-              currentNumber.substring(0, currentNumber.length - 1))!;
-          calculations.resultOfCalculations = newResult;
-
-        } else if (currentNumber.length == 2) {
-          var newResult = calculations.resultOfCalculations *
-              double.tryParse(currentNumber)!;
-          newResult /= double.tryParse(currentNumber[0])!;
-
-          calculations.resultOfCalculations = newResult;
-        } else if (currentNumber.length == 1) {
-          var newResult = calculations.resultOfCalculations /
-              double.tryParse(currentNumber)!;
-          calculations.resultOfCalculations = newResult;
-        }
-        break;
-      default:
-        var currentNumber = collectCurrentNumber();
-        if (currentNumber.length > 2) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          newResult += double.tryParse(
-              currentNumber.substring(0, currentNumber.length - 1))!;
-          //_calculateResultAfterDeletion();
-          calculations.resultOfCalculations = newResult;
-          // then remove the digit from currentNumber
-          // add it to new result
-          // and update resultOfCalculations
-        } else if (currentNumber.length == 2) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          newResult += double.tryParse(currentNumber[0])!;
-
-          calculations.resultOfCalculations = newResult;
-        } else if (currentNumber.length == 1) {
-          var newResult = calculations.resultOfCalculations -
-              double.tryParse(currentNumber)!;
-          calculations.resultOfCalculations = newResult;
-        }
-        break;
-    }
+    calculations.resultOfCalculations = DeleteCalculationProcessor(
+            _getLastOperator(), calculations, collectCurrentNumber())
+        .process()
+        .resultOfCalculations;
   }
-
+// Collect number doesnt collect .
   String collectCurrentNumber() {
     String currentNumber = "";
     for (var i = displayedActions.length - 1; i >= 0; i--) {
       if (_isActionAnOperator(displayedActions[i])) {
         break;
-      } else if (_isActionADigit(displayedActions[i])) {
+      } else if (_isActionADigit(displayedActions[i]) || displayedActions[i] ==".") {
         currentNumber += displayedActions[i];
       }
     }
