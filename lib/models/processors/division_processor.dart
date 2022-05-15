@@ -6,6 +6,7 @@ class DivisionProcessor implements CalculationProcessor {
   DivisionProcessor(this._calculations);
   final CalculationsModel _calculations;
 
+  @override
   CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();

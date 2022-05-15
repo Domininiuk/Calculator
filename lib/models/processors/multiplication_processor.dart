@@ -5,6 +5,7 @@ class MultiplicationProcessor implements CalculationProcessor{
   MultiplicationProcessor(this._calculations);
   final CalculationsModel _calculations;
 
+  @override
   CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();

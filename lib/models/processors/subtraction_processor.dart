@@ -6,6 +6,7 @@ class SubtractionProcessor implements CalculationProcessor{
   SubtractionProcessor(this._calculations);
   final CalculationsModel _calculations;
 
+  @override
   CalculationsModel process() {
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _processTripleDigitOrLongerNumber();

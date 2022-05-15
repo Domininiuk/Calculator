@@ -2,12 +2,8 @@
 This model object represents a combination of all operands and operators
  */
 import 'package:calculator/models/calculations.dart';
-import 'package:calculator/models/processors/addition_processor.dart';
 import 'package:calculator/models/processors/delete_processors/delete_processor.dart';
-import 'package:calculator/models/processors/division_processor.dart';
-import 'package:calculator/models/processors/multiplication_processor.dart';
 import 'package:calculator/models/processors/calculation_processor.dart';
-import 'package:calculator/models/processors/subtraction_processor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +17,7 @@ class CalculatorModel extends ChangeNotifier {
   String displayedActions = "";
   bool hasEqualButtonBeenPressed = false;
 
+  // Calculate result instead?
   void addOperand(String operand) {
     isSameNumber = true;
     if (hasEqualButtonBeenPressed) {
@@ -28,22 +25,53 @@ class CalculatorModel extends ChangeNotifier {
       hasEqualButtonBeenPressed = false;
       notifyListeners();
     }
-    if (_isOperandADot(operand) && !_isPreviousActionADigit()) {
-    } else {
-      if (_isOperandADot(operand) && calculations.currentNumber.contains(".")) {
-      } else {
-        displayedActions += operand;
-        calculations.currentNumber += operand;
-
-        _addToActions(operand);
-        notifyListeners();
-      }
+  
+  
+    if (_isOperandNotAllowed(operand)) {
+      doNothing();
     }
+    else
+      {
+        addOperandToVariables(operand);
+        _calculateNewResult();
+      }
+  }
 
+  bool _isOperandNotAllowed(String operand)
+  {
+    return _isOperandADot(operand) && _isDotNotAllowed(operand);
+  }
+  bool _isOperandADot(String operand) {
+    return operand == ".";
+  }
+  bool _isDotNotAllowed(String operand)
+  {
+    return _isCurrentNumberAFraction(operand)
+        || !_isPreviousActionADigit();
+  }
+  bool _isCurrentNumberAFraction(String operand)
+  {
+    return calculations.currentNumber.contains(".");
+  }
+  void addOperandToVariables(String operand)
+  {
+    displayedActions += operand;
+    calculations.currentNumber += operand;
+
+    _addToActions(operand);
+    notifyListeners();
+  }
+
+
+  void doNothing() {}
+  void _clearResultOfCalculations() {
+    calculations.resultOfCalculations = 0.0;
+  }
+
+  void _calculateNewResult() {
     if (calculations.currentNumber.isNotEmpty) {
       calculations =
           CalculationProcessor(_getLastOperator(), calculations).process();
-
       notifyListeners();
     }
   }
@@ -52,9 +80,7 @@ class CalculatorModel extends ChangeNotifier {
     return action == "+" || action == "-" || action == "x" || action == '÷';
   }
 
-  bool _isOperandADot(String operand) {
-    return operand == ".";
-  }
+
 
   bool _isPreviousActionADigit() {
     if (actions.isNotEmpty) {
@@ -75,19 +101,22 @@ class CalculatorModel extends ChangeNotifier {
 
   void addOperator(String operator) {
     isSameNumber = false;
-
     calculations.formerResult = 0.0;
 
     if (operator == "=") {
       _clearCalculator();
-      hasEqualButtonBeenPressed = true;
+      // hasEqualButtonBeenPressed = true;
+      reverseHasEqualButtonBeenPressed();
+
       notifyListeners();
     }
     if (!_wasPreviousActionAnOperator() &&
         (actions.isNotEmpty || calculations.currentNumber.isNotEmpty)) {
       if (operator == "=") {
         _clearCalculator();
-        hasEqualButtonBeenPressed = true;
+        //hasEqualButtonBeenPressed = true;
+        reverseHasEqualButtonBeenPressed();
+
         notifyListeners();
       } else {
         _updatePreviousNumber();
@@ -114,6 +143,10 @@ class CalculatorModel extends ChangeNotifier {
   void _clearActions() {
     actions.clear();
     displayedActions = "";
+  }
+
+  void reverseHasEqualButtonBeenPressed() {
+    hasEqualButtonBeenPressed = !hasEqualButtonBeenPressed;
   }
 
   bool _wasPreviousActionAnOperator() {
@@ -174,8 +207,6 @@ class CalculatorModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-//TODO
-// I could create a factory to replace the switch statement? Page 70 of clean code
 
   void _calculateResultAfterDeletion() {
     calculations.resultOfCalculations = DeleteCalculationProcessor(
@@ -183,13 +214,15 @@ class CalculatorModel extends ChangeNotifier {
         .process()
         .resultOfCalculations;
   }
+
 // Collect number doesnt collect .
   String collectCurrentNumber() {
     String currentNumber = "";
     for (var i = displayedActions.length - 1; i >= 0; i--) {
       if (_isActionAnOperator(displayedActions[i])) {
         break;
-      } else if (_isActionADigit(displayedActions[i]) || displayedActions[i] ==".") {
+      } else if (_isActionADigit(displayedActions[i]) ||
+          displayedActions[i] == ".") {
         currentNumber += displayedActions[i];
       }
     }
