@@ -37,7 +37,7 @@ class _Calculator extends StatelessWidget {
                       .read<CalculatorModel>()
                       .calculations
                       .resultOfCalculations
-                      .toString(),
+                      .toStringAsFixed(5),
                   textScaleFactor: 3.3,
                   maxLines: 3,
                   minFontSize: 2.0,

@@ -20,13 +20,12 @@ class CalculatorModel extends ChangeNotifier {
   // Calculate result instead?
   void addOperand(String operand) {
     isSameNumber = true;
+
     if (hasEqualButtonBeenPressed) {
-      calculations.resultOfCalculations = 0.0;
-      hasEqualButtonBeenPressed = false;
+      _clearResultOfCalculations();
+      reverseHasEqualButtonBeenPressed();
       notifyListeners();
     }
-  
-  
     if (_isOperandNotAllowed(operand)) {
       doNothing();
     }
@@ -103,29 +102,21 @@ class CalculatorModel extends ChangeNotifier {
     isSameNumber = false;
     calculations.formerResult = 0.0;
 
+    // code is repeated here
     if (operator == "=") {
       _clearCalculator();
-      // hasEqualButtonBeenPressed = true;
       reverseHasEqualButtonBeenPressed();
-
       notifyListeners();
     }
     if (!_wasPreviousActionAnOperator() &&
         (actions.isNotEmpty || calculations.currentNumber.isNotEmpty)) {
-      if (operator == "=") {
-        _clearCalculator();
-        //hasEqualButtonBeenPressed = true;
-        reverseHasEqualButtonBeenPressed();
-
-        notifyListeners();
-      } else {
         _updatePreviousNumber();
         _clearCurrentNumber();
         _addToActions(operator);
         displayedActions += operator;
 
         notifyListeners();
-      }
+
     }
   }
 

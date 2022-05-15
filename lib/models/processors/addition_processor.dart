@@ -1,7 +1,7 @@
 import 'package:calculator/models/processors/calculation_processor.dart';
 
 import '../calculations.dart';
-
+import 'package:decimal/decimal.dart';
 class AdditionProcessor implements CalculationProcessor{
   AdditionProcessor(this._calculations);
   final CalculationsModel _calculations;
