@@ -81,10 +81,10 @@ class DivisionProcessor implements CalculationProcessor {
   }
 
   void _processSingleDigitNumber() {
-    if (_isCurrentNumberZero()) {
+    if (!_isCurrentNumberZero()) {
       _updateFormerResult();
+      divideResultOfCalculations();
     }
-    divideResultOfCalculations();
   }
 
   bool _isCurrentNumberZero() {

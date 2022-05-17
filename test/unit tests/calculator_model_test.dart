@@ -27,6 +27,18 @@ void main()
 
 
     group('addition', (){
+      test('5 + 0', ()
+      {
+        calculator.addOperand('5');
+        calculator.addOperator('+');
+        calculator.addOperand('0');
+
+        expect(calculator.actions.length, 3);
+        expect(calculator.isSameNumber, true);
+        expect(calculator.deletedDigits, "");
+        expect(calculator.displayedActions,  "5+0");
+        expect(calculator.calculations.resultOfCalculations, 5.0);
+      });
 
       test('5', ()
       {
@@ -66,6 +78,20 @@ void main()
         expect(calculator.calculations.resultOfCalculations, 55.02);
       });
 
+      test('5 + 0.5', ()
+      {
+        calculator.addOperand('5');
+        calculator.addOperator('+');
+        calculator.addOperand('0');
+        calculator.addOperand('.');
+        calculator.addOperand('5');
+
+        expect(calculator.actions.length, 5);
+        expect(calculator.isSameNumber, true);
+        expect(calculator.deletedDigits, "");
+        expect(calculator.displayedActions,  "5+0.5");
+        expect(calculator.calculations.resultOfCalculations, 5.5);
+      });
       test('5 + 0.5', ()
       {
         calculator.addOperand('5');
@@ -167,6 +193,18 @@ void main()
     });
 
     group('subtraction', (){
+      test('5 - 0', ()
+      {
+        calculator.addOperand('5');
+        calculator.addOperator('-');
+        calculator.addOperand('0');
+
+        expect(calculator.actions.length, 3);
+        expect(calculator.isSameNumber, true);
+        expect(calculator.deletedDigits, "");
+        expect(calculator.displayedActions,  "5-0");
+        expect(calculator.calculations.resultOfCalculations, 5.0);
+      });
       test('5 - 0.5', ()
       {
         calculator.addOperand('5');
@@ -269,6 +307,18 @@ void main()
       });
     });
   group('division', (){
+    test('5 ÷ 0', ()
+    {
+      calculator.addOperand('5');
+      calculator.addOperator('÷');
+      calculator.addOperand('0');
+
+      expect(calculator.actions.length, 3);
+      expect(calculator.isSameNumber, true);
+      expect(calculator.deletedDigits, "");
+      expect(calculator.displayedActions,  "5÷0");
+      expect(calculator.calculations.resultOfCalculations, 5.0);
+    });
     test('5 ÷ 0.5', ()
     {
       calculator.addOperand('5');
