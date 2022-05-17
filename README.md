@@ -6,11 +6,8 @@
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
-* [Setup](#setup)
-* [Usage](#usage)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
-* [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
 <!-- * [License](#license) -->
 
@@ -35,12 +32,6 @@ This is a simple calculator application for Android and iOS.
 ## Screenshots
 ![spedup -demo](https://user-images.githubusercontent.com/75265195/167788388-cd807e3e-5fcc-48a4-8edc-d81dee7ec0a7.gif)
 
-
-
-## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
-
-Proceed to describe how to install / setup one's local environment / get started with the project.
 
 
 
