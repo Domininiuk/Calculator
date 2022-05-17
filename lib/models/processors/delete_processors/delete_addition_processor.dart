@@ -10,6 +10,7 @@ class DeleteAdditionProcessor implements DeleteCalculationProcessor {
 
   @override
   CalculationsModel process() {
+    _calculations.currentNumber = _collectedCurrentNumber;
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber);
       _calculations.addToResultOfCalculations(_collectedCurrentNumber.substring(

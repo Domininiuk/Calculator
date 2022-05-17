@@ -10,6 +10,8 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
 
   @override
   CalculationsModel process() {
+    _calculations.currentNumber = _collectedCurrentNumber;
+
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
       _calculations.divideResultOfCalculations(_collectedCurrentNumber.substring(

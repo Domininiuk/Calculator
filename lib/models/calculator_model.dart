@@ -14,7 +14,6 @@ class CalculatorModel extends ChangeNotifier {
   // I could create an Actions class?
   bool isSameNumber = false;
   final List<String> actions = [];
-  String deletedDigits = "";
   String previousNumber = "";
   String displayedActions = "";
   bool hasEqualButtonBeenPressed = false;
@@ -180,15 +179,14 @@ class CalculatorModel extends ChangeNotifier {
     if (displayedActions.isNotEmpty) {
       int index = displayedActions.length - 1;
 
-      if (_isActionADigit(displayedActions[index]) &&
-          (calculations.currentNumber.isNotEmpty ||
-              deletedDigits.isNotEmpty ||
-              displayedActions.isNotEmpty)) {
+      if (_isActionADigit(displayedActions[index])) {
+        //deletedDigits += displayedActions[index];
         _calculateResultAfterDeletion();
         _deleteLastDigitFromCurrentNumber();
-      } else if (_isActionAnOperator(displayedActions[index]) &&
-          deletedDigits.isNotEmpty) {
-        deletedDigits = "";
+      } else if (_isActionAnOperator(displayedActions[index]))
+          //&& deletedDigits.isNotEmpty)
+        {
+       // deletedDigits = "";
       }
       if (index == 0) {
         displayedActions = "";

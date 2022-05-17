@@ -8,6 +8,8 @@ class DeleteSubtractionProcessor implements DeleteCalculationProcessor {
 
   @override
   CalculationsModel process() {
+    _calculations.currentNumber = _collectedCurrentNumber;
+
     if (_isCurrentNumberTripleDigitOrLonger()) {
       _calculations.addToResultOfCalculations(_collectedCurrentNumber);
       _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber.substring(
