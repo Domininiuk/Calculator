@@ -1,35 +1,36 @@
 import '../../calculations.dart';
 import 'delete_processor.dart';
-
+import 'package:rational/rational.dart';
 class DeleteSubtractionProcessor implements DeleteCalculationProcessor {
-  DeleteSubtractionProcessor(this.calculations, this.collectedCurrentNumber);
-  CalculationsModel calculations;
-  String collectedCurrentNumber;
+  DeleteSubtractionProcessor(this._calculations, this._collectedCurrentNumber);
+  CalculationsModel _calculations;
+  String _collectedCurrentNumber;
+
   @override
   CalculationsModel process() {
-    var currentNumber = collectedCurrentNumber;
-    if (currentNumber.length > 2) {
-      var newResult =
-          calculations.resultOfCalculations + double.tryParse(currentNumber)!;
-      newResult -= double.tryParse(
-          currentNumber.substring(0, currentNumber.length - 1))!;
-      //_calculateResultAfterDeletion();
-      calculations.resultOfCalculations = newResult;
-      // then remove the digit from currentNumber
-      // add it to new result
-      // and update resultOfCalculations
-    } else if (currentNumber.length == 2) {
-      var newResult =
-          calculations.resultOfCalculations + double.tryParse(currentNumber)!;
-      newResult -= double.tryParse(currentNumber[0])!;
+    if (_isCurrentNumberTripleDigitOrLonger()) {
+      _calculations.addToResultOfCalculations(_collectedCurrentNumber);
+      _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber.substring(
+          0, _collectedCurrentNumber.length - 1));
+    } else if (_isCurrentNumberDoubleDigit()) {
+      _calculations.addToResultOfCalculations(_collectedCurrentNumber);
+      _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber[0]);
 
-      calculations.resultOfCalculations = newResult;
-    } else if (currentNumber.length == 1) {
-      var newResult =
-          calculations.resultOfCalculations + double.tryParse(currentNumber)!;
-      calculations.resultOfCalculations = newResult;
+    } else if (_isCurrentNumberSingleDigit()) {
+      _calculations.addToResultOfCalculations(_collectedCurrentNumber);
     }
 
-    return calculations;
+    return _calculations;
+  }
+  bool _isCurrentNumberTripleDigitOrLonger() {
+    return _calculations.isCurrentNumberTripleDigitOrLonger();
+  }
+
+  void _processTripleDigitOrLongerNumber() {}
+  bool _isCurrentNumberDoubleDigit() {
+    return _calculations.isCurrentNumberDoubleDigit();
+  }
+  bool _isCurrentNumberSingleDigit() {
+    return _calculations.isCurrentNumberSingleDigit();
   }
 }

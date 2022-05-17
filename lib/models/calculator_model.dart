@@ -4,8 +4,10 @@ This model object represents a combination of all operands and operators
 import 'package:calculator/models/calculations.dart';
 import 'package:calculator/models/processors/delete_processors/delete_processor.dart';
 import 'package:calculator/models/processors/calculation_processor.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:rational/rational.dart';
 
 class CalculatorModel extends ChangeNotifier {
   CalculationsModel calculations = CalculationsModel.createEmptyModel();
@@ -64,7 +66,7 @@ class CalculatorModel extends ChangeNotifier {
 
   void doNothing() {}
   void _clearResultOfCalculations() {
-    calculations.resultOfCalculations = 0.0;
+    calculations.resultOfCalculations = Rational.parse("0.0");
   }
 
   void _calculateNewResult() {
@@ -100,7 +102,7 @@ class CalculatorModel extends ChangeNotifier {
 
   void addOperator(String operator) {
     isSameNumber = false;
-    calculations.formerResult = 0.0;
+    calculations.formerResult = Rational.parse("0.0");
 
     // code is repeated here
     if (operator == "=") {

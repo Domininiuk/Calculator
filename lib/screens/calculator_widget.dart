@@ -1,8 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:calculator/models/calculator_model.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:rational/rational.dart';
 import '../common/theme.dart';
 import 'operand_button.dart';
 import 'operator_button.dart';
@@ -32,12 +33,10 @@ class _Calculator extends StatelessWidget {
             return Expanded(
               child: Visibility(
                 visible: true,
-                child: AutoSizeText(
-                  context
-                      .read<CalculatorModel>()
-                      .calculations
-                      .resultOfCalculations
-                      .toStringAsFixed(5),
+                child: AutoSizeText(context
+                    .read<CalculatorModel>()
+                    .calculations
+                    .resultOfCalculations.toDecimal(scaleOnInfinitePrecision: 5).toString(),
                   textScaleFactor: 3.3,
                   maxLines: 3,
                   minFontSize: 2.0,

@@ -1,34 +1,40 @@
 
 import '../../calculations.dart';
 import 'delete_processor.dart';
-
+import 'package:rational/rational.dart';
 class DeleteMultiplicationProcessor implements DeleteCalculationProcessor
 {
-  DeleteMultiplicationProcessor(this.calculations, this.collectedCurrentNumber);
-  CalculationsModel calculations;
-  String collectedCurrentNumber;
+  DeleteMultiplicationProcessor(this._calculations, this._collectedCurrentNumber);
+  CalculationsModel _calculations;
+  String _collectedCurrentNumber;
 
   @override
   CalculationsModel process() {
-    var currentNumber = collectedCurrentNumber;
-    if (currentNumber.length > 2) {
-      var newResult = calculations.resultOfCalculations /
-          double.tryParse(currentNumber)!;
-      newResult *= double.tryParse(
-          currentNumber.substring(0, currentNumber.length - 1))!;
-      calculations.resultOfCalculations = newResult;
+    if (_isCurrentNumberTripleDigitOrLonger()) {
+      _calculations.divideResultOfCalculations(_collectedCurrentNumber);
+      _calculations.multiplyResultOfCalculations(_collectedCurrentNumber.substring(
+          0, _collectedCurrentNumber.length - 1));
+    } else if (_isCurrentNumberDoubleDigit()) {
+      _calculations.divideResultOfCalculations(_collectedCurrentNumber);
+      _calculations.multiplyResultOfCalculations(_collectedCurrentNumber[0]);
 
-    } else if (currentNumber.length == 2) {
-      var newResult = calculations.resultOfCalculations /
-          double.tryParse(currentNumber)!;
-      newResult *= double.tryParse(currentNumber[0])!;
-
-      calculations.resultOfCalculations = newResult;
-    } else if (currentNumber.length == 1) {
-      var newResult = calculations.resultOfCalculations /
-          double.tryParse(currentNumber)!;
-      calculations.resultOfCalculations = newResult;
+    } else if (_isCurrentNumberSingleDigit()) {
+      _calculations.divideResultOfCalculations(_collectedCurrentNumber);
     }
-    return calculations;
+
+    return _calculations;
   }
+  bool _isCurrentNumberTripleDigitOrLonger() {
+    return _calculations.isCurrentNumberTripleDigitOrLonger();
+  }
+
+  void _processTripleDigitOrLongerNumber() {}
+  bool _isCurrentNumberDoubleDigit() {
+    return _calculations.isCurrentNumberDoubleDigit();
+  }
+  bool _isCurrentNumberSingleDigit() {
+    return _calculations.isCurrentNumberSingleDigit();
+  }
+
+
 }

@@ -1,6 +1,7 @@
 import 'package:calculator/models/processors/calculation_processor.dart';
 
 import '../calculations.dart';
+import 'package:rational/rational.dart';
 class AdditionProcessor implements CalculationProcessor{
   AdditionProcessor(this._calculations);
   final CalculationsModel _calculations;
@@ -46,9 +47,9 @@ class AdditionProcessor implements CalculationProcessor{
   }
 
   void _reverseCalculationOfAllPreviousDigits() {
-    _calculations.resultOfCalculations -= double.tryParse(_calculations
+    _calculations.subtractFromResultOfCalculations(_calculations
         .currentNumber
-        .substring(0, _calculations.currentNumber.length - 1))!;
+        .substring(0, _calculations.currentNumber.length - 1));
   }
 
   bool _isCurrentNumberSmallerThanOne() {
@@ -65,8 +66,7 @@ class AdditionProcessor implements CalculationProcessor{
   }
 
   void reverseCalculationOfFirstDigit() {
-    _calculations.resultOfCalculations -=
-        double.tryParse(_calculations.currentNumber[0])!;
+    _calculations.subtractFromResultOfCalculations(_calculations.currentNumber[0]);
   }
 
   void _doNothing() {}
@@ -95,7 +95,6 @@ class AdditionProcessor implements CalculationProcessor{
   }
 
   void subtractResultOfCalculations() {
-    _calculations.resultOfCalculations +=
-        double.tryParse(_calculations.currentNumber)!;
+    _calculations.addToResultOfCalculations(_calculations.currentNumber);
   }
 }

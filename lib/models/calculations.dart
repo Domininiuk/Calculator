@@ -1,14 +1,35 @@
+import 'package:decimal/decimal.dart';
+import 'package:rational/rational.dart';
+
 class CalculationsModel {
   CalculationsModel(
       this.currentNumber, this.resultOfCalculations, this.formerResult);
 
   CalculationsModel.createEmptyModel();
   String currentNumber = "";
-  double resultOfCalculations = 0.0;
-  double formerResult = 0.0;
+  Rational resultOfCalculations = Rational.parse("0.0");
+  Rational formerResult = Rational.parse("0.0");
 
+  
+  void multiplyResultOfCalculations(String number)
+  {
+    resultOfCalculations *= Rational.parse(number);
+  }
+  void divideResultOfCalculations(String number)
+  {
+    resultOfCalculations /= Rational.parse(number);
+  }
+  void subtractFromResultOfCalculations(String number)
+  {
+    resultOfCalculations -= Rational.parse(number);
+  }
+  void addToResultOfCalculations(String number)
+  {
+    resultOfCalculations += Rational.parse(number);
+  }
   void updateResultOfCalculations()
   {
+    
     resultOfCalculations = formerResult;
   }
   void updateFormerResult()
