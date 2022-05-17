@@ -8,19 +8,43 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
   CalculationsModel _calculations;
   String _collectedCurrentNumber;
 
+
+  // Zeroes after the . in decimal numbers dont matter e.g .90000040004
+  // But they do matter in the numbers before them e.g. 900000000.44444
+
+  // It works fine when the number before the . is not 0
   @override
   CalculationsModel process() {
     _calculations.currentNumber = _collectedCurrentNumber;
 
     if (_isCurrentNumberTripleDigitOrLonger()) {
-      _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
-      _calculations.divideResultOfCalculations(_collectedCurrentNumber.substring(
-          0, _collectedCurrentNumber.length - 1));
+      /*
+
+      IF YOU MULTIPLE A FRACTION SMALLER THAN 1
+      THEN ALL YOURE REALLY DOING IS DIVISION
+      BECAUSE THE NUMBER WILL BE SMALLER
+       */
+      // If the number contains only one digit except for zeroes? but then what if
+      // e.g. 0.009, 0.1, 0.000000000010
+
+
+      //
+      if(_isCurrentNumberADecimal() && _calculations.isCurrentNumberSmallerThanOne() &&
+          _calculations.currentNumberHasOnlyOneDigitDifferentToZero())
+        {
+          _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
+        }
+      else
+        {
+          _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
+          _calculations.divideResultOfCalculations(_collectedCurrentNumber.substring(
+              0, _collectedCurrentNumber.length - 1));
+        }
     } else if (_isCurrentNumberDoubleDigit()) {
       _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
       _calculations.divideResultOfCalculations(_collectedCurrentNumber[0]);
 
-    } else if (_isCurrentNumberSingleDigit()) {
+    } else if (_isCurrentNumberSingleDigit() && !_calculations.isCurrentNumberZero()) {
       _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
     }
 
@@ -30,6 +54,10 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
     return _calculations.isCurrentNumberTripleDigitOrLonger();
   }
 
+  bool _isCurrentNumberADecimal()
+  {
+    return _calculations.isCurrentNumberADecimal();
+  }
   void _processTripleDigitOrLongerNumber() {}
   bool _isCurrentNumberDoubleDigit() {
     return _calculations.isCurrentNumberDoubleDigit();
