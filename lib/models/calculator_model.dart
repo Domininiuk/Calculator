@@ -4,7 +4,6 @@ This model object represents a combination of all operands and operators
 import 'package:calculator/models/calculations.dart';
 import 'package:calculator/models/processors/delete_processors/delete_processor.dart';
 import 'package:calculator/models/processors/calculation_processor.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rational/rational.dart';
@@ -39,7 +38,11 @@ class CalculatorModel extends ChangeNotifier {
 
   bool _isOperandNotAllowed(String operand)
   {
-    return _isOperandADot(operand) && _isDotNotAllowed(operand);
+    return _isOperandADot(operand) && _isDotNotAllowed(operand) && _isZeroNotAllowed(operand);
+  }
+  bool _isZeroNotAllowed(String operand)
+  {
+    return operand == "0" && calculations.currentNumber.isEmpty;
   }
   bool _isOperandADot(String operand) {
     return operand == ".";

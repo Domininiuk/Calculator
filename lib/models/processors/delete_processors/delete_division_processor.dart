@@ -1,34 +1,25 @@
-import 'package:decimal/decimal.dart';
-
 import '../../calculations.dart';
 import 'delete_processor.dart';
-import 'package:rational/rational.dart';
 class DeleteDivisionProcessor implements DeleteCalculationProcessor {
   DeleteDivisionProcessor(this._calculations, this._collectedCurrentNumber);
-  CalculationsModel _calculations;
-  String _collectedCurrentNumber;
+  final CalculationsModel _calculations;
+  final String _collectedCurrentNumber;
 
 
   // Zeroes after the . in decimal numbers dont matter e.g .90000040004
   // But they do matter in the numbers before them e.g. 900000000.44444
 
-  // It works fine when the number before the . is not 0
+  // CURRENT BUG
+  // 0.9 / 0.3 = with each new 0 added to 0.3 it will divided again by 0.30, 0.300 etc
   @override
   CalculationsModel process() {
     _calculations.currentNumber = _collectedCurrentNumber;
-
+    if(_isLastDigitInCurrentNumberAZero())
+    {
+      return _calculations;
+    }
     if (_isCurrentNumberTripleDigitOrLonger()) {
-      /*
 
-      IF YOU MULTIPLE A FRACTION SMALLER THAN 1
-      THEN ALL YOURE REALLY DOING IS DIVISION
-      BECAUSE THE NUMBER WILL BE SMALLER
-       */
-      // If the number contains only one digit except for zeroes? but then what if
-      // e.g. 0.009, 0.1, 0.000000000010
-
-
-      //
       if(_isCurrentNumberADecimal() && _calculations.isCurrentNumberSmallerThanOne() &&
           _calculations.currentNumberHasOnlyOneDigitDifferentToZero())
         {
@@ -49,6 +40,10 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
     }
 
     return _calculations;
+  }
+  bool _isLastDigitInCurrentNumberAZero()
+  {
+    return _calculations.isLastDigitInCurrentNumberAZero();
   }
   bool _isCurrentNumberTripleDigitOrLonger() {
     return _calculations.isCurrentNumberTripleDigitOrLonger();

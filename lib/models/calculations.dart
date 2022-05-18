@@ -1,4 +1,3 @@
-import 'package:decimal/decimal.dart';
 import 'package:rational/rational.dart';
 
 class CalculationsModel {
@@ -47,7 +46,6 @@ class CalculationsModel {
     var counts = collectDigitOccurrencesInCurrentNumber();
 
     if (counts.keys.length > 3) {
-      return false;
     } else if (counts.keys.length == 3) {
       for (var element in counts.keys) {
         if (counts[element]! >= 1 && element == "0") {}
@@ -57,8 +55,9 @@ class CalculationsModel {
             return false;
           }
       }
+      return true;
     }
-    return true;
+    return false;
   }
 
   Map collectDigitOccurrencesInCurrentNumber() {
@@ -96,5 +95,9 @@ class CalculationsModel {
 
   bool isCurrentNumberADecimal() {
     return currentNumber.contains(".");
+  }
+
+  bool isLastDigitInCurrentNumberAZero() {
+    return currentNumber[currentNumber.length - 1] == "0";
   }
 }
