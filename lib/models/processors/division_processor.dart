@@ -2,17 +2,18 @@ import 'package:calculator/models/processors/calculation_processor.dart';
 
 import '../calculations.dart';
 import 'package:rational/rational.dart';
-
 class DivisionProcessor implements CalculationProcessor {
   DivisionProcessor(this._calculations);
   final CalculationsModel _calculations;
 
+
   @override
   CalculationsModel process() {
-    if (_isLastDigitInCurrentNumberAZero()) {
-      return _calculations;
-    }
     if (_isCurrentNumberTripleDigitOrLonger()) {
+      if(_calculations.isLastDigitInCurrentNumberAZero())
+      {
+        return _calculations;
+      }
       _processTripleDigitOrLongerNumber();
     } else if (_isCurrentNumberDoubleDigit()) {
       _processDoubleDigitNumber();
@@ -20,10 +21,6 @@ class DivisionProcessor implements CalculationProcessor {
       _processSingleDigitNumber();
     }
     return _calculations;
-  }
-
-  bool _isLastDigitInCurrentNumberAZero() {
-    return _calculations.isLastDigitInCurrentNumberAZero();
   }
 
   bool _isCurrentNumberTripleDigitOrLonger() {
@@ -76,7 +73,7 @@ class DivisionProcessor implements CalculationProcessor {
 
   void reverseCalculationOfFirstDigit() {
     _calculations.resultOfCalculations *=
-        Rational.tryParse(_calculations.currentNumber[0])!;
+    Rational.tryParse(_calculations.currentNumber[0])!;
   }
 
   void _doNothing() {}
@@ -106,6 +103,6 @@ class DivisionProcessor implements CalculationProcessor {
 
   void divideResultOfCalculations() {
     _calculations.resultOfCalculations /=
-        Rational.tryParse(_calculations.currentNumber)!;
+    Rational.tryParse(_calculations.currentNumber)!;
   }
 }

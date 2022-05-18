@@ -22,15 +22,15 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
 
       if(_isCurrentNumberADecimal() && _calculations.isCurrentNumberSmallerThanOne() &&
           _calculations.currentNumberHasOnlyOneDigitDifferentToZero())
-        {
-          _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
-        }
+      {
+        _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
+      }
       else
-        {
-          _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
-          _calculations.divideResultOfCalculations(_collectedCurrentNumber.substring(
-              0, _collectedCurrentNumber.length - 1));
-        }
+      {
+        _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
+        _calculations.divideResultOfCalculations(_collectedCurrentNumber.substring(
+            0, _collectedCurrentNumber.length - 1));
+      }
     } else if (_isCurrentNumberDoubleDigit()) {
       _calculations.multiplyResultOfCalculations(_collectedCurrentNumber);
       _calculations.divideResultOfCalculations(_collectedCurrentNumber[0]);
@@ -40,6 +40,12 @@ class DeleteDivisionProcessor implements DeleteCalculationProcessor {
     }
 
     return _calculations;
+  }
+
+
+  void processTripleOrLongerNumber()
+  {
+
   }
   bool _isLastDigitInCurrentNumberAZero()
   {
