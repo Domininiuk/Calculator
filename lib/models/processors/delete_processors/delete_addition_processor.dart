@@ -12,15 +12,11 @@ class DeleteAdditionProcessor implements DeleteCalculationProcessor {
   CalculationsModel process() {
     _calculations.currentNumber = _collectedCurrentNumber;
     if (_isCurrentNumberTripleDigitOrLonger()) {
-      _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber);
-      _calculations.addToResultOfCalculations(_collectedCurrentNumber.substring(
-          0, _collectedCurrentNumber.length - 1));
+      _processTripleDigitOrLongerNumber();
     } else if (_isCurrentNumberDoubleDigit()) {
-      _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber);
-      _calculations.addToResultOfCalculations(_collectedCurrentNumber[0]);
-
+      _processDoubleDigitNumber();
     } else if (_isCurrentNumberSingleDigit()) {
-      _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber);
+      _processSingleDigitNumber();
     }
 
     return _calculations;
@@ -30,11 +26,38 @@ class DeleteAdditionProcessor implements DeleteCalculationProcessor {
     return _calculations.isCurrentNumberTripleDigitOrLonger();
   }
 
-  void _processTripleDigitOrLongerNumber() {}
+  void _processTripleDigitOrLongerNumber() {
+    _reverseCalculationOfCurrentNumber();
+    _addBackRemainingDigitsToResultOfCalculations();
+  }
+
+  void _reverseCalculationOfCurrentNumber() {
+    _calculations.subtractFromResultOfCalculations(_collectedCurrentNumber);
+  }
+
+  void _addBackRemainingDigitsToResultOfCalculations() {
+    _calculations.addToResultOfCalculations(_collectedCurrentNumber.substring(
+        0, _collectedCurrentNumber.length - 1));
+  }
+
   bool _isCurrentNumberDoubleDigit() {
     return _calculations.isCurrentNumberDoubleDigit();
   }
+
+  void _processDoubleDigitNumber() {
+    _reverseCalculationOfCurrentNumber();
+    _addBackFirstDigitToResult();
+  }
+
+  void _addBackFirstDigitToResult() {
+    _calculations.addToResultOfCalculations(_collectedCurrentNumber[0]);
+  }
+
   bool _isCurrentNumberSingleDigit() {
     return _calculations.isCurrentNumberSingleDigit();
+  }
+
+  void _processSingleDigitNumber() {
+    _reverseCalculationOfCurrentNumber();
   }
 }
