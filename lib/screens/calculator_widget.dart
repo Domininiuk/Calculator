@@ -39,6 +39,7 @@ class _Calculator extends StatelessWidget {
                     .resultOfCalculations.toDecimal(scaleOnInfinitePrecision: 5).toString(),
                   textScaleFactor: 3.3,
                   maxLines: 3,
+                  stepGranularity: 0.5,
                   minFontSize: 2.0,
                   style: const TextStyle(),
                 ),
@@ -53,12 +54,17 @@ class _Calculator extends StatelessWidget {
             color: Colors.black,
           )),
       Consumer<CalculatorModel>(builder: (context, calculations, child) {
-        return Expanded(
+        return SizedBox(
+          width: double.infinity,
+            height: 100,
             child: AutoSizeText(
           context.read<CalculatorModel>().displayedActions.toString(),
+          textAlign: TextAlign.left,
           textScaleFactor: 3.0,
           maxLines: 5,
-          minFontSize: 2.0,
+              stepGranularity: 0.5,
+
+              minFontSize: 2.0,
           style: TextStyle(
             color: Colors.black.withOpacity(0.5),
           ),
